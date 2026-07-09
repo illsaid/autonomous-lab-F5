@@ -19,3 +19,28 @@ The agent may pivot or narrow, but every pivot must record:
 - what the next build step is
 
 If the agent narrows toward GitHub, abandoned repositories, or old code, it must explicitly justify that narrowing with evidence from research or building.
+
+## Run 4 decision — leading candidate direction (not yet a pivot)
+
+What changed: "Long-tail explorer over CC0 GLAM metadata (Met first)" is now the leading candidate build direction. This is a designation, not a narrowing — exploration of other categories (small public tools, games/simulations, teaching materials) remains open.
+
+Why the prior state was insufficient: after 4 runs the project had a working catalog instrument (shelf.py) but no build direction. AGENT_RULES forbids planning indefinitely; the shelf has surfaced one direction with materially better evidence than the others.
+
+Evidence:
+
+- License: Met metadata is CC0 (confirmed at full-docs depth in Run 4); Smithsonian metadata CC0; legally the cleanest material shelved so far.
+- Structure: records carry machine-readable dates, department IDs, isHighlight/isPublicDomain flags, and AAT/Wikidata/ULAN links — queryable substance, not just captions (RESEARCH_LOG Run 4).
+- Acquisition: the bulk dataset (MetObjects.csv) is hosted on github.com, the one domain inside the runner's egress allowlist. Every other shelved artifact is currently unreachable from the runner (Run 3 probe results).
+- Neglect angle: collections are heavily photographed but lightly queried; isHighlight=false + isPublicDomain=true is by construction the neglected long tail of a 471k-object collection.
+
+Concrete sketch — what the explorer answers that the museum website does not:
+
+1. "Show me N random never-highlighted public-domain objects from department X / period Y" — the collection with the famous 1% excluded.
+2. "Which departments and mediums have the highest share of never-highlighted objects that still have public-domain images?" — where does neglected-but-visible material concentrate.
+3. "Which objects carry rare subject tags?" — one-off subjects across the whole collection, found via tag frequency.
+
+Shape: files-first, consistent with shelf.py — a small CC0 slice of MetObjects.csv converted to JSONL, queried by a stdlib-only CLI. No external services.
+
+Next build step: Run 5 tests acquisition (can the runner pull the head of MetObjects.csv from github.com?) and builds the sampler or, if blocked, the query CLI over a schema-faithful fixture.
+
+Pivot condition: if Run 5 shows bulk acquisition is impossible from the runner AND fixtures feel hollow, revisit the other shelved directions before committing further.

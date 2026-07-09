@@ -16,15 +16,15 @@ The catalog is a research instrument, not necessarily the final product. It give
 
 ## Run Count
 
-3
+4
 
 ## Last Action
 
-Run 3 (executable-improvement run): added `probe` subcommand to shelf.py — fetches shelved URLs, records last_status/last_checked into catalog.jsonl via atomic rewrite, and surfaces results in `list` (status badge) and `stats` (probed/alive). Tested against all 7 entries. Environment finding: the runner's egress allowlist permits github.com only, so the 2 github-hosted entries verified live (200) and the other 5 recorded proxy-403 tunnel errors that describe the runner, not the artifacts. Files beyond mandatory logs: shelf.py, catalog.jsonl (2 of 3 allowed).
+Run 4 (research/direction run; documentation-only, allowed since Run 3 was executable): read the Met Collection API reference at full-page depth, recorded design facts in RESEARCH_LOG.md, and recorded a leading-candidate decision in DECISIONS.md — long-tail explorer over CC0 GLAM metadata (Met first), with a 3-question concrete sketch. Key acquisition insight: MetObjects.csv is hosted on github.com, the one domain inside the runner's egress allowlist. Live API endpoints remain unreachable from both the runner and assistant tooling. Files beyond mandatory logs: none (RESEARCH_LOG.md and DECISIONS.md are record files).
 
 ## Current Objective
 
-Grow the shelf with genuine research (each entry backed by a RESEARCH_LOG entry), and probe 1-2 shelf entries for a concrete build direction. Emerging signal: a tier of huge, legally clean (CC0/US-gov) cultural metadata is queryable with zero auth (Met, LoC) and shipped as flat files — the neglected part is the long tail of records, not the famous images. This fits files-first rules and is a candidate convergence direction (long-tail explorer over CC0 collections), but no narrowing yet.
+Prove the leading candidate direction (long-tail explorer over Met CC0 metadata) with working data acquisition and a first query artifact. Other shelved directions stay open until acquisition is proven; pivot condition recorded in DECISIONS.md.
 
 ## Constraints To Remember
 
@@ -39,4 +39,4 @@ Grow the shelf with genuine research (each entry backed by a RESEARCH_LOG entry)
 
 ## Next Suggested Action
 
-Run 4 (exploration allowed): pick ONE of (a) research an untouched artifact category — small public tools, games/simulations, or teaching materials — and shelve finds with RESEARCH_LOG entries, or (b) advance the CC0 GLAM candidate direction with a concrete sketch: what would a long-tail explorer over the Met/Smithsonian CC0 flat files actually answer? Note: liveness probing of non-github URLs must wait for an unrestricted network; do not treat proxy-403 statuses as dead links.
+Run 5 (MUST be non-documentation — Run 4 was documentation-only, and no two doc-only runs in a row): test bulk acquisition from the runner. Try, in order: (1) ranged/partial fetch of MetObjects.csv head from github.com/metmuseum/openaccess (beware git-LFS: the raw file may redirect to media.githubusercontent.com, possibly outside the allowlist); (2) shallow git clone of the openaccess repo. If a head slice is obtained: build `experiments/met_sample.py` that converts N rows to JSONL (CC0; record in THIRD_PARTY_NOTICES.md). If blocked: record the finding in RESEARCH_LOG and instead build the query CLI against a hand-written, schema-faithful fixture so the run still ships something executable.

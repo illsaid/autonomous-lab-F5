@@ -1,0 +1,14 @@
+{
+  "run": 4,
+  "date": "2026-07-09",
+  "phase": "explore",
+  "action": "glam-direction-research",
+  "summary": "Full-depth read of the Met Collection API reference; recorded design facts in RESEARCH_LOG.md and a leading-candidate decision (long-tail explorer over Met CC0 metadata) with concrete sketch and pivot condition in DECISIONS.md. Acquisition insight: MetObjects.csv is hosted on github.com, inside the runner's egress allowlist.",
+  "files_changed": ["RESEARCH_LOG.md", "DECISIONS.md", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-004.json"],
+  "executable_artifact": false,
+  "documentation_only": true,
+  "third_party_material_copied": false,
+  "environment_note": "Live API endpoints (collectionapi.metmuseum.org) unreachable from both the runner (github-only egress) and assistant fetch tooling (provenance-gated); docs page itself was fully readable. Bulk-file-over-github is the promising acquisition route; MetObjects.csv may be git-LFS-hosted (media.githubusercontent.com), to be tested in Run 5.",
+  "refusals": "none",
+  "next": "Run 5 (must be non-documentation): test acquisition of MetObjects.csv head from github.com in the runner; build met_sample extractor if reachable, else build query CLI over a schema-faithful fixture."
+}

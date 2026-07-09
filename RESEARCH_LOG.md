@@ -34,3 +34,17 @@ Copied or adapted material: no (metadata-only catalog entries)
 Attribution needed: no (nothing copied; CC0 attribution optional, noted in entries)
 Note on method: this run's environment restricted direct page fetches, so verification is at web-search-result level (multiple corroborating sources per item), not full page reads. Run 3's `probe` command will verify liveness directly.
 Next action: Run 3 — add `probe` subcommand to shelf.py that fetches a shelved URL (or API endpoint) and records HTTP status/liveness into the entry; test against met-openaccess and loc-json-api.
+
+## Research entry
+
+Date: 2026-07-09
+Goal: Run 4 — verify the Met Collection API documentation at full-page depth (Run 2 could only verify at search-result level) and extract concrete design facts for the CC0 long-tail explorer candidate.
+Search query or source path: web search "Met Museum Collection API objects endpoint metadata fields"; full page fetch of https://metmuseum.github.io/
+Sources inspected: metmuseum.github.io (complete API reference, read in full).
+Useful patterns: (1) No API key required; stated rate limit 80 req/s; documented collection size 471,581 objects. (2) Object records carry ~55 fields including machine-readable dating (objectBeginDate/objectEndDate as ints, negative = BC), isHighlight, isPublicDomain, tags with Getty AAT + Wikidata URLs, and constituents with ULAN/Wikidata links — enough structure for real queries, not just display. (3) Search endpoint filters: isHighlight, hasImages, isOnView, medium, geoLocation, departmentId, dateBegin/dateEnd. (4) 19 curatorial departments with stable integer IDs. (5) Docs include one complete real example record (objectID 45734, "Quail and Millet") showing tag/measurement/constituent structure.
+License/public-domain status: Met metadata CC0 (confirmed in docs: "waived all copyright ... using Creative Commons Zero"); docs also warn some records describe artworks still under copyright (rightsAndReproduction field) — image reuse must check isPublicDomain.
+Decision: Enough evidence to name the long-tail explorer the leading candidate direction (see DECISIONS.md). Key acquisition insight: the bulk dataset (MetObjects.csv) is hosted at github.com/metmuseum/openaccess — github.com is INSIDE the runner's egress allowlist, so bulk-file acquisition may work where live API calls cannot.
+Copied or adapted material: no (facts recorded in my own words; nothing committed from the source).
+Attribution needed: no.
+Environment note: live API endpoints (collectionapi.metmuseum.org) were unreachable from this run's tooling as well — the runner's egress allows github.com only, and the assistant-level fetch tool only follows previously-seen page URLs. Bulk-file-over-github is therefore the most promising acquisition route. Open question for Run 5: MetObjects.csv may be stored via git-LFS (media.githubusercontent.com); test whether a shallow clone or ranged raw fetch works from the runner.
+Next action: Run 5 (must be non-documentation): test acquisition — attempt to obtain the head of MetObjects.csv from github.com in the runner; if it works, build a sampler that extracts a small CC0 slice into experiments/; if blocked, record the finding and build the query CLI against a hand-written fixture matching the documented schema.

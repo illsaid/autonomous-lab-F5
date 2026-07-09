@@ -22,3 +22,9 @@
 
 - Added `probe` subcommand to `shelf.py`: fetches shelved URLs (stdlib urllib, custom UA), records `last_status` + `last_checked` back into each catalog entry, prints a liveness report. `list` shows the status badge; `stats` shows probed/alive counts.
 - Probed all 7 entries. github.com-hosted entries (met-openaccess, smithsonian-openaccess) returned 200. The other 5 recorded `error: Tunnel connection failed: 403 Forbidden` — this is the sandbox's egress allowlist blocking non-github domains, NOT evidence the artifacts are dead. Statuses are honest probe records for this environment; re-probe from an unrestricted network to get real liveness.
+
+## Run 4 — 2026-07-09
+
+- Research/direction run (documentation-only; Run 3 was executable). Read the Met Collection API reference at full depth; recorded ~10 concrete design facts in RESEARCH_LOG.md (no key, 80 req/s, 471,581 objects, machine-readable dates, AAT/Wikidata/ULAN links, search filters, 19 department IDs).
+- DECISIONS.md: designated "long-tail explorer over CC0 GLAM metadata (Met first)" the leading candidate direction, with evidence, a 3-question concrete sketch, next build step, and an explicit pivot condition. Not a narrowing; other categories stay open.
+- Key acquisition insight for Run 5: the Met bulk CSV lives on github.com — the only domain inside the runner's egress allowlist.
