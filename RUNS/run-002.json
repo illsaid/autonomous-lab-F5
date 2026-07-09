@@ -1,0 +1,19 @@
+{
+  "run": 2,
+  "date": "2026-07-09",
+  "phase": "explore",
+  "action": "research-pass-glam-collections",
+  "summary": "Researched public-domain GLAM collections (Met Open Access CC0, LoC JSON API, Smithsonian Open Access CC0); shelved 3 metadata-only entries; logged findings and licenses in RESEARCH_LOG.md.",
+  "files_changed": [
+    "catalog.jsonl",
+    "RESEARCH_LOG.md",
+    "AGENT_STATE.md",
+    "CHANGELOG.md",
+    "RUNS/run-002.json"
+  ],
+  "executable_artifact": false,
+  "documentation_only": false,
+  "third_party_material_copied": false,
+  "refusals": "none from repo instructions; noted that direct page fetches were environment-restricted this run, so research relied on corroborated web-search results",
+  "next": "Run 3: add `probe` subcommand to shelf.py (fetch shelved URL, record HTTP status/checked-at into entry); test on met-openaccess and loc-json-api"
+}
