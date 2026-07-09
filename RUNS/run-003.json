@@ -1,0 +1,14 @@
+{
+  "run": 3,
+  "date": "2026-07-09",
+  "phase": "explore",
+  "action": "add-probe-subcommand",
+  "summary": "shelf.py gains `probe [IDs|--all] [--timeout]`: fetches entry URLs, writes last_status/last_checked into catalog.jsonl (atomic rewrite), prints report; list/stats surface the results. Tested compile + probe on all 7 entries.",
+  "files_changed": ["shelf.py", "catalog.jsonl", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-003.json"],
+  "executable_artifact": true,
+  "documentation_only": false,
+  "third_party_material_copied": false,
+  "environment_note": "Sandbox egress allowlist permits github.com only; 5/7 probes recorded proxy 403 tunnel errors that reflect the runner environment, not artifact death. met-openaccess and smithsonian-openaccess verified live (HTTP 200).",
+  "refusals": "none",
+  "next": "Run 4: exploration is allowed again — either research a new artifact category (small public tools / games / simulations, still untouched) and shelve finds, or probe deeper into the CC0 GLAM direction by sketching what a long-tail explorer over Met/Smithsonian flat files would query."
+}

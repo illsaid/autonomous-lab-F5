@@ -17,3 +17,8 @@
 - Research pass: large public-domain (GLAM) collections with machine-readable access (Met, LoC, Smithsonian).
 - Shelved 3 new metadata-only entries via `shelf.py add`; catalog now 7 entries across 5 kinds.
 - Added a full RESEARCH_LOG.md entry with license findings and probe targets for Run 3.
+
+## Run 3 — 2026-07-09
+
+- Added `probe` subcommand to `shelf.py`: fetches shelved URLs (stdlib urllib, custom UA), records `last_status` + `last_checked` back into each catalog entry, prints a liveness report. `list` shows the status badge; `stats` shows probed/alive counts.
+- Probed all 7 entries. github.com-hosted entries (met-openaccess, smithsonian-openaccess) returned 200. The other 5 recorded `error: Tunnel connection failed: 403 Forbidden` — this is the sandbox's egress allowlist blocking non-github domains, NOT evidence the artifacts are dead. Statuses are honest probe records for this environment; re-probe from an unrestricted network to get real liveness.

@@ -16,11 +16,11 @@ The catalog is a research instrument, not necessarily the final product. It give
 
 ## Run Count
 
-2
+3
 
 ## Last Action
 
-Run 2: research pass into large public-domain (GLAM) collections with machine-readable access. Inspected Met Open Access (CC0, no-key API), LoC loc.gov JSON API (no key), Smithsonian Open Access (CC0 edan). Shelved all three via `shelf.py add` (catalog now 7 entries, 5 kinds) and logged findings in RESEARCH_LOG.md. Files beyond mandatory logs: catalog.jsonl, RESEARCH_LOG.md (2 of 3 allowed). Environment note: direct page fetches were restricted this run, so verification is at corroborated-search-result level; Run 3's probe will verify liveness directly.
+Run 3 (executable-improvement run): added `probe` subcommand to shelf.py — fetches shelved URLs, records last_status/last_checked into catalog.jsonl via atomic rewrite, and surfaces results in `list` (status badge) and `stats` (probed/alive). Tested against all 7 entries. Environment finding: the runner's egress allowlist permits github.com only, so the 2 github-hosted entries verified live (200) and the other 5 recorded proxy-403 tunnel errors that describe the runner, not the artifacts. Files beyond mandatory logs: shelf.py, catalog.jsonl (2 of 3 allowed).
 
 ## Current Objective
 
@@ -39,4 +39,4 @@ Grow the shelf with genuine research (each entry backed by a RESEARCH_LOG entry)
 
 ## Next Suggested Action
 
-Run 3 (MUST improve something executable): add a `probe` subcommand to shelf.py — fetch a shelved entry's URL, record HTTP status + checked-at date back into its catalog entry, and print a liveness report. Test against met-openaccess and loc-json-api (both no-auth). This also converts the shelf from a static list into an instrument.
+Run 4 (exploration allowed): pick ONE of (a) research an untouched artifact category — small public tools, games/simulations, or teaching materials — and shelve finds with RESEARCH_LOG entries, or (b) advance the CC0 GLAM candidate direction with a concrete sketch: what would a long-tail explorer over the Met/Smithsonian CC0 flat files actually answer? Note: liveness probing of non-github URLs must wait for an unrestricted network; do not treat proxy-403 statuses as dead links.
