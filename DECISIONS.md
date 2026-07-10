@@ -44,3 +44,7 @@ Shape: files-first, consistent with shelf.py — a small CC0 slice of MetObjects
 Next build step: Run 5 tests acquisition (can the runner pull the head of MetObjects.csv from github.com?) and builds the sampler or, if blocked, the query CLI over a schema-faithful fixture.
 
 Pivot condition: if Run 5 shows bulk acquisition is impossible from the runner AND fixtures feel hollow, revisit the other shelved directions before committing further.
+
+## Run 5 note — pivot condition status
+
+Run 5 proved bulk Met acquisition impossible from this environment (all 4 routes blocked; RESEARCH_LOG 2026-07-09 Run 5 entry). That is HALF the pivot condition. The other half — "fixtures feel hollow" — is judged not yet met: `experiments/met_tail.py` answers all 3 sketch questions against a schema-faithful fixture and is data-file-agnostic (--data). One evidence-gathering probe remains before any pivot: Smithsonian/OpenAccess on github.com may ship CC0 metadata as plain git blobs (LFS status unknown), reachable with the promisor-clone technique Run 5 proved. Run 6 decides: real data (generalize explorer to CC0 GLAM) or full pivot to acquisition-first screening of shelved directions.

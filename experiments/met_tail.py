@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+"""met_tail.py — query the neglected long tail of Met CC0 collection metadata.
+
+Answers the three questions from DECISIONS.md (Run 4 sketch):
+
+  tail   Show N random never-highlighted public-domain objects,
+         optionally filtered by department and date range.
+  share  Per-department share of never-highlighted public-domain objects.
+  tags   Subject-tag frequency across records; --rare lists one-off tags
+         and the objects that carry them.
+  show   Print one record as JSON by objectID.
+
+Data is JSONL, one object per line, using the Met Collection API field
+names (objectID, isHighlight, isPublicDomain, department, tags, ...).
+Default data file is met_fixture.jsonl next to this script — a small
+schema-faithful fixture (see --data to point at a real extract).
+Records with "fixture": true are synthetic and clearly marked; the rest
+are real CC0 records.
+
+Usage:
+  python3 met_tail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S]
+  python3 met_tail.py share
+  python3 met_tail.py tags [--rare]
+  python3 met_tail.py show OBJECTID
+  (all commands accept --data PATH)
+"""
+import argparse
+import json
+import random
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+DEFAULT_DATA = Path(__file__).parent / "met_fixture.jsonl"
+
+
+def load(path):
+    p = Path(path)
+    if not p.exists():
+        sys.exit(f"data file not found: {p}")
+    records = []
+    for i, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            records.append(json.loads(line))
+        except json.JSONDecodeError as e:
+            sys.exit(f"{p} line {i}: invalid JSON: {e}")
+    return records
+
+
+def is_long_tail(r):
+    return r.get("isPublicDomain") is True and r.get("isHighlight") is not True
+
+
+def fmt(r):
+    date = r.get("objectDate") or f"{r.get('objectBeginDate','?')}–{r.get('objectEndDate','?')}"
+    artist = r.get("artistDisplayName") or r.get("culture") or "unknown maker"
+    mark = " [synthetic fixture]" if r.get("fixture") else ""
+    return (f"  {r.get('objectID')}: {r.get('title','(untitled)')} — {artist}, {date}\n"
+            f"      {r.get('department','?')} | {r.get('medium','?')}{mark}")
+
+
+def cmd_tail(args):
+    rs = [r for r in load(args.data) if is_long_tail(r)]
+    if args.department:
+        rs = [r for r in rs if args.department.lower() in (r.get("department") or "").lower()]
+    if args.begin is not None:
+        rs = [r for r in rs if isinstance(r.get("objectEndDate"), int) and r["objectEndDate"] >= args.begin]
+    if args.end is not None:
+        rs = [r for r in rs if isinstance(r.get("objectBeginDate"), int) and r["objectBeginDate"] <= args.end]
+    if not rs:
+        print("no never-highlighted public-domain objects match")
+        return
+    rng = random.Random(args.seed)
+    picks = rng.sample(rs, min(args.n, len(rs)))
+    print(f"{len(picks)} of {len(rs)} matching long-tail objects:")
+    for r in picks:
+        print(fmt(r))
+
+
+def cmd_share(args):
+    by_dept = defaultdict(lambda: [0, 0])  # dept -> [total, long_tail]
+    for r in load(args.data):
+        d = r.get("department") or "(no department)"
+        by_dept[d][0] += 1
+        if is_long_tail(r):
+            by_dept[d][1] += 1
+    rows = sorted(by_dept.items(), key=lambda kv: (-(kv[1][1] / kv[1][0]), kv[0]))
+    w = max(len(d) for d, _ in rows)
+    print(f"{'department':<{w}}  total  long-tail  share")
+    for d, (total, lt) in rows:
+        print(f"{d:<{w}}  {total:>5}  {lt:>9}  {lt/total:>5.0%}")
+    print("(long tail = isPublicDomain and never isHighlight)")
+
+
+def cmd_tags(args):
+    records = load(args.data)
+    freq = Counter()
+    carriers = defaultdict(list)
+    for r in records:
+        for t in r.get("tags") or []:
+            term = t.get("term")
+            if term:
+                freq[term] += 1
+                carriers[term].append(r)
+    if not freq:
+        print("no tags in data")
+        return
+    if args.rare:
+        rare = sorted(t for t, c in freq.items() if c == 1)
+        print(f"{len(rare)} tags appear exactly once:")
+        for t in rare:
+            r = carriers[t][0]
+            print(f"  {t}: {r.get('objectID')} {r.get('title','(untitled)')}")
+    else:
+        print(f"{len(freq)} distinct tags across {len(records)} records:")
+        for t, c in freq.most_common():
+            print(f"  {c:>3}  {t}")
+
+
+def cmd_show(args):
+    for r in load(args.data):
+        if r.get("objectID") == args.objectID:
+            json.dump(r, sys.stdout, indent=2, ensure_ascii=False)
+            print()
+            return
+    sys.exit(f"objectID {args.objectID} not in data")
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--data", default=str(DEFAULT_DATA), help="JSONL data file")
+    sub = p.add_subparsers(dest="cmd", required=True)
+    sp = sub.add_parser("tail", help="random never-highlighted public-domain objects")
+    sp.add_argument("-n", type=int, default=5)
+    sp.add_argument("--department")
+    sp.add_argument("--begin", type=int, help="objects ending at/after this year (negative = BC)")
+    sp.add_argument("--end", type=int, help="objects beginning at/before this year")
+    sp.add_argument("--seed", type=int, help="random seed for reproducible output")
+    sp.set_defaults(fn=cmd_tail)
+    sub.add_parser("share", help="per-department long-tail share").set_defaults(fn=cmd_share)
+    sp = sub.add_parser("tags", help="tag frequency")
+    sp.add_argument("--rare", action="store_true", help="tags appearing exactly once")
+    sp.set_defaults(fn=cmd_tags)
+    sp = sub.add_parser("show", help="print one record")
+    sp.add_argument("objectID", type=int)
+    sp.set_defaults(fn=cmd_show)
+    args = p.parse_args()
+    args.fn(args)
+
+
+if __name__ == "__main__":
+    main()

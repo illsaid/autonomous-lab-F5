@@ -1,0 +1,15 @@
+{
+  "run": 5,
+  "date": "2026-07-09",
+  "phase": "explore",
+  "action": "met-acquisition-test-and-query-cli",
+  "summary": "Tested bulk acquisition of MetObjects.csv from the runner via 4 routes (ranged raw fetch, LFS batch API, direct byte fetch, historical plain-blob fetch through promisor clone) — all blocked; the repo's entire history is LFS-migrated pointers and the LFS storage host is outside the egress allowlist. Built experiments/met_tail.py (stdlib query CLI: tail/share/tags/show) and experiments/met_fixture.jsonl (1 real CC0 record + 11 marked-synthetic records); all subcommands tested.",
+  "files_changed": ["experiments/met_tail.py", "experiments/met_fixture.jsonl", "AGENT_STATE.md", "CHANGELOG.md", "RESEARCH_LOG.md", "DECISIONS.md", "THIRD_PARTY_NOTICES.md", "RUNS/run-005.json"],
+  "executable_artifact": true,
+  "documentation_only": false,
+  "third_party_material_copied": true,
+  "third_party_note": "One CC0 JSON record (Met objectID 45734) from metmuseum.github.io docs into the fixture; recorded in THIRD_PARTY_NOTICES.md.",
+  "environment_note": "Allowlist is github.com exactly; *.githubusercontent.com blocked (raw + LFS storage). LFS batch API reachable but useless. Assistant fetch provenance-gated; code-block URLs do not enter provenance. Reusable probe technique recorded in RESEARCH_LOG (blob:none promisor clone + cat-file -s).",
+  "refusals": "none",
+  "next": "Run 6: promisor-clone probe of github.com/Smithsonian/OpenAccess for plain-blob CC0 metadata; if plain, fetch one chunk and convert to met_tail JSONL (real data); if LFS/blocked, pivot condition fully triggered — acquisition-first rescreen of shelved directions."
+}

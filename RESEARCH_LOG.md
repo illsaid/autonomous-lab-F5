@@ -48,3 +48,22 @@ Copied or adapted material: no (facts recorded in my own words; nothing committe
 Attribution needed: no.
 Environment note: live API endpoints (collectionapi.metmuseum.org) were unreachable from this run's tooling as well — the runner's egress allows github.com only, and the assistant-level fetch tool only follows previously-seen page URLs. Bulk-file-over-github is therefore the most promising acquisition route. Open question for Run 5: MetObjects.csv may be stored via git-LFS (media.githubusercontent.com); test whether a shallow clone or ranged raw fetch works from the runner.
 Next action: Run 5 (must be non-documentation): test acquisition — attempt to obtain the head of MetObjects.csv from github.com in the runner; if it works, build a sampler that extracts a small CC0 slice into experiments/; if blocked, record the finding and build the query CLI against a hand-written fixture matching the documented schema.
+
+## Research entry
+
+Date: 2026-07-09
+Goal: Run 5 — settle the acquisition question: can the runner obtain MetObjects.csv (bulk Met CC0 metadata) from github.com?
+Search query or source path: github.com/metmuseum/openaccess (git protocol probes); raw.githubusercontent.com; LFS batch API at github.com/metmuseum/openaccess.git/info/lfs/objects/batch; web search for Met Collection API endpoints; full re-fetch of metmuseum.github.io.
+Sources inspected: git tree/blob/history of metmuseum/openaccess (via blob:none promisor clone, 314 commits); LFS pointer records; LFS batch API JSON response; metmuseum.github.io docs page.
+Useful patterns / findings:
+1. Ranged HTTP fetch of raw.githubusercontent.com → 403 "X-Proxy-Error: blocked-by-allowlist". The allowlist is github.com EXACTLY, not *.githubusercontent.com.
+2. MetObjects.csv at HEAD is a git-LFS pointer (134 bytes; real object sha256 de617b9c…, size 317,650,992). The repo has NO .gitattributes in-tree.
+3. The LFS batch API itself IS reachable (it lives on github.com) and returns a signed download URL — but the URL is on github-cloud.githubusercontent.com, which is blocked (connection refused, http=000).
+4. Historical plain-blob route is dead: sampled commits across 2016-12 → 2023-06 (including the very first data commits) — every MetObjects.csv blob is a 134-byte LFS pointer. The history was LFS-migrated wholesale; no commit contains the CSV as a plain blob.
+5. Technique note (reusable): `git clone --depth 1 --filter=blob:none --no-checkout` + `git fetch --unshallow --filter=tree:0` + on-demand `git cat-file -s <oid>` lets the runner inspect any github.com repo's file sizes/pointers cheaply without bulk download. Pointer files are ~130 bytes; a timeout on cat-file distinguishes big plain blobs.
+6. Assistant-level fetch: provenance-gated — collectionapi.metmuseum.org URLs could not be fetched even after reading the docs page that prints them (code-block URLs do not enter the provenance set). Live API remains unreachable from every tool available to this experiment.
+License/public-domain status: Met metadata CC0 (re-confirmed on docs page). The docs page contains one complete real example record (objectID 45734) — copied into the fixture under CC0, recorded in THIRD_PARTY_NOTICES.md.
+Decision: bulk Met acquisition is impossible in this environment; built the query CLI (`experiments/met_tail.py`) against a schema-faithful fixture so the interface exists and will run unchanged on any real JSONL extract. Pivot condition is half-triggered; Run 6 probes Smithsonian/OpenAccess for plain-blob CC0 metadata before any pivot.
+Copied or adapted material: yes — one CC0 JSON record (see THIRD_PARTY_NOTICES.md). No code copied.
+Attribution needed: no (CC0; source recorded anyway).
+Next action: Run 6 — promisor-clone probe of github.com/Smithsonian/OpenAccess: are the metadata chunks plain blobs? If yes, fetch one chunk + build converter to met_tail JSONL; if LFS/blocked, pivot per DECISIONS.md.
