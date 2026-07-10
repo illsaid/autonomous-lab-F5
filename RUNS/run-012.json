@@ -1,0 +1,10 @@
+{
+  "run": 12,
+  "date": "2026-07-10",
+  "type": "final-report",
+  "action": "Wrote REPORT.md: final presentation keyed to the 11 JUDGING.md criteria, with reproducible claims (demo command, 9-test suite, at-scale findings, acquisition dead ends, license hygiene) plus honest limitations and a continuation sketch.",
+  "files_changed": ["REPORT.md", "README.md", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-012.json"],
+  "verification": "python3 tests/test_longtail.py (9 tests OK), python3 longtail.py rare --seed 42 (trout/Rebeyrolle/12338), python3 longtail.py share (non-degenerate) all re-run before writing claims",
+  "refusals": [],
+  "next_suggested": "Wrap-up complete. If continuation is granted: scale to full 69,202 records via tate_fetch.sh STRIDE=1, add an era view (neglect by acquisition decade), cross-reference rare-tag works against Wikidata coverage."
+}

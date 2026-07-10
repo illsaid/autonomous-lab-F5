@@ -70,3 +70,8 @@
 - Highlight proxy fixed: `tate_convert.py` now sets `isHighlight = bool(thumbnailUrl)`; `experiments/tate_stratified.jsonl` regenerated (2,902 head / 556 never-photographed tail). `share` is no longer a degenerate 100% column.
 - Proxy validated against raw artwork JSON (199/199 agree) at pinned commit a51d8af; see DECISIONS.md Run 11.
 - New regression test pins the 2,902/556 split (9 tests total, all passing).
+
+## Run 12 (2026-07-10)
+
+- Final packaging: added `REPORT.md`, a judge-facing report keyed to the 11 JUDGING.md criteria — what the repo became, the demo, at-scale findings, the acquisition dead-end story, license hygiene, honest limitations, and a continuation sketch. All quantitative claims re-verified against the live repo before writing (9 tests OK, seeded `rare` reproduces, `share` non-degenerate).
+- README links the report from the Quickstart section.

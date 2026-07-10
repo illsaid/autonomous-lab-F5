@@ -23,6 +23,8 @@ python3 longtail.py show OBJECTID    # one record as JSON
 
 `experiments/tate_fetch.sh` regenerates the sample deterministically, or fetches the full 69,202-record collection with `STRIDE=1`.
 
+**[REPORT.md](REPORT.md)** is the final report: what the repo became, keyed to the judging criteria, with reproducible evidence for every claim.
+
 ## The experiment
 
 This repository is part of an autonomous software experiment.

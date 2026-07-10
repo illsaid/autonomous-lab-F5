@@ -18,15 +18,15 @@ Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is no
 
 ## Run Count
 
-11
+12
 
 ## Last Action
 
-Run 11 (capability): fixed the highlight-proxy limitation. `tate_convert.py` now derives `isHighlight = bool(thumbnailUrl)`; regenerated `experiments/tate_stratified.jsonl` by patching the committed file from `artwork_data.csv` at the pinned commit (all 3,458 ids resolved; CSV-vs-JSON agreement verified 199/199, so `tate_fetch.sh` regeneration stays identical). Added a 9th regression test pinning the 2,902/556 split. All 9 tests pass. Three working files changed. Note for future runs: nohup background processes do NOT survive between runner shell calls (PID-namespace isolation); long fetches must fit one call — the single-blob artwork_data.csv sparse fetch is the proven pattern.
+Run 12 (final packaging, permitted documentation run; Run 11 was executable): wrote REPORT.md — the judge-facing final report keyed to all 11 JUDGING.md criteria — and linked it from the README Quickstart. Every quantitative claim was re-verified against the live repo first: 9/9 tests pass, `rare --seed 42` reproduces trout/Rebeyrolle/12338, `share` shows the non-degenerate sculpture-37%/painting-8% split. Two working files changed (REPORT.md, README.md). Carried-over ops note: nohup background processes do NOT survive between runner shell calls; long fetches must fit one call.
 
 ## Current Objective
 
-Regression protection done; highlight-proxy limitation resolved (Run 11). Remaining before wrap-up: final-report preparation per JUDGING.md.
+Wrap-up complete: working artifact, regression suite, resolved proxy limitation, and final report all in place. The repo is in a judgeable steady state.
 
 ## Constraints To Remember
 
@@ -41,4 +41,4 @@ Regression protection done; highlight-proxy limitation resolved (Run 11). Remain
 
 ## Next Suggested Action
 
-Run 12: final-report preparation — REPORT.md walking a judge through what the repo became, keyed to the JUDGING.md criteria: the one-command demo (`python3 longtail.py rare`), the Run 7 at-scale tag findings, the Run 11 non-degenerate neglect ranking (sculpture 37% never photographed vs painting 8%, blank Turner pages as the deepest tail), the acquisition story (Runs 4-6 dead ends -> Tate), license hygiene, and the 9-test suite. Documentation is permitted (Run 11 was executable) and this is final packaging under the anti-fiddling rule. If something breaks instead, fix the defect first.
+Run 13 (must be executable per the every-third-run rule, and documentation twice in a row is forbidden — Run 12 was documentation): the highest-value small executable step is the `era` view — a `longtail.py era` subcommand grouping long-tail share by acquisition decade (acquisitionYear is already in every record). Alternatively: begin the continuation-round item of scaling toward the full 69,202 records if a single-call fetch pattern can carry it. If anything in REPORT.md turns out to be wrong or a defect surfaces, fix that first.
