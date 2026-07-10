@@ -41,3 +41,9 @@
 - Data-source pivot Met → Tate recorded in DECISIONS.md (Met acquisition impossible; Tate is CC0, plain-blob, and itself a neglected frozen-2014 artifact).
 - Built `experiments/tate_convert.py` (stdlib-only): converts Tate artwork JSON to the met_tail JSONL schema (field mapping documented in the script; subjects-tree leaves → tags; classification → department; isHighlight=False recorded as a mapping limitation).
 - Added `experiments/tate_sample.jsonl`: 290 REAL CC0 records (4 accession-prefix directories, commit a51d8af). `met_tail.py` verified unchanged against real data: tail, share, tags, tags --rare, show, and date filters all work. The fixture is no longer the only data.
+
+## Run 7 — 2026-07-09
+
+- Scaled real data ~12x: `experiments/tate_stratified.jsonl` — 3,458 CC0 records (2.4 MB), a deterministic stratified sample (every 20th of 738 artwork subdirs at pinned commit a51d8af, proportional across all 6 accession prefixes). Chose the JSON route over artwork_data.csv because the CSV lacks the subjects tree that feeds tags/--rare.
+- Added `experiments/tate_fetch.sh`: regenerates the sample byte-for-byte (verified by diff) via blob:none clone + sparse-checkout; `STRIDE=1` fetches the full 69,202-record collection.
+- Verified met_tail.py at scale: share (70% Turner-Bequest "on paper, unique"), tags (2,595 distinct), tags --rare (1,345 singletons, 52% — the long-tail story), tail/show/date/department filters, reproducible --seed. Findings in RESEARCH_LOG.md.

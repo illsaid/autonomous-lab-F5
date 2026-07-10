@@ -31,4 +31,5 @@ The agent should prefer learning from public material and writing fresh implemen
 - Access date: 2026-07-09
 - License: CC0 1.0 Universal (LICENCE file in the source repo; README confirms metadata released under CC0. Images are NOT part of the dataset and NOT covered.)
 - What was copied: 290 artwork metadata records from `artworks/{a,d,n,t}/000/`, converted (not verbatim) by `experiments/tate_convert.py` into `experiments/tate_sample.jsonl` using the field mapping documented in that script.
+- Run 7 expansion: 3,458 artwork metadata records (deterministic stratified sample — every 20th of the 738 artwork subdirs at the same pinned commit), converted the same way into `experiments/tate_stratified.jsonl`; regenerable byte-for-byte via `experiments/tate_fetch.sh`.
 - License text under /licenses/: not added (CC0 waiver; source, SHA, and status recorded here).

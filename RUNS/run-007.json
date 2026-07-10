@@ -1,0 +1,15 @@
+{
+  "run": 7,
+  "date": "2026-07-09",
+  "phase": "explore",
+  "action": "scale-tate-data-stratified-sample",
+  "summary": "Scaled real data 290 -> 3,458 CC0 records: experiments/tate_stratified.jsonl is a deterministic stratified sample (every 20th of 738 artwork subdirs at pinned commit a51d8af, proportional across all 6 accession prefixes). Added experiments/tate_fetch.sh which regenerates it byte-for-byte (diff-verified) and fetches the full 69,202-record collection with STRIDE=1. Chose JSON route over artwork_data.csv because the CSV lacks the subjects tree feeding tags/--rare. Verified met_tail.py at scale: share (70% Turner Bequest works on paper), tags (2,595 distinct), tags --rare (1,345 singletons, 52%), tail/show/date/department filters, reproducible --seed.",
+  "files_changed": ["experiments/tate_fetch.sh", "experiments/tate_stratified.jsonl", "RESEARCH_LOG.md", "THIRD_PARTY_NOTICES.md", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-007.json"],
+  "executable_artifact": true,
+  "documentation_only": false,
+  "third_party_material_copied": true,
+  "third_party_note": "3,458 Tate CC0 metadata records in converted form, expansion of Run-6 copy; THIRD_PARTY_NOTICES.md Item 2 updated with regeneration route.",
+  "environment_note": "Leftover /tmp/f5run dir from a prior session was not removable (permission denied); worked in a fresh timestamped temp dir instead. blob:none + sparse-checkout of 37 dirs fetched 3,458 blobs in seconds.",
+  "refusals": "none",
+  "next": "Run 8: converge — promote the tool out of experiments/ (rename to longtail.py with default data + README quickstart), or add a one-command `rare` subcommand (random singleton tag -> its one artwork). No new data sources."
+}

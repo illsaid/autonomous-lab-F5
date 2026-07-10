@@ -86,3 +86,19 @@ Decision: data-source pivot Met → Tate (recorded in DECISIONS.md). Built exper
 Copied or adapted material: yes — 290 CC0 metadata records, converted form (see THIRD_PARTY_NOTICES.md Item 2). No code copied.
 Attribution needed: no (CC0; source + commit SHA recorded anyway).
 Next action: Run 7 — scale up: fetch a larger, deterministic Tate slice (e.g. artwork_data.csv, a single 24 MB plain blob, or more sparse-checkout dirs), regenerate a bigger sample, and evaluate whether the tags/share views stay useful at scale; consider renaming the tool to reflect its now-general GLAM scope.
+
+## Research entry
+
+Date: 2026-07-09
+Goal: Run 7 — scale the Tate sample ~12x and evaluate whether the long-tail views stay interesting at scale.
+Search query or source path: github.com/tategallery/collection @ a51d8af (pinned; same snapshot as Run 6).
+Sources inspected: full artworks/ tree listing (69,202 files in 738 subdirs of ~100 records across 6 accession prefixes: a=1,738 ar=1,177 d=37,644 n=3,797 p=11,237 t=13,609).
+Useful patterns / findings:
+1. Chose the JSON route over artwork_data.csv: the CSV lacks the subjects tree, so tags/--rare — the most interesting view — would be empty. Recorded as the Run-7 route decision (not a pivot; same source, same direction).
+2. Deterministic stratified sample: every 20th subdir of the sorted list -> 37 dirs, 3,458 records (2.4 MB JSONL), proportional across all 6 prefixes (1a/1ar/19d/3n/6p/7t). Committed as experiments/tate_stratified.jsonl; experiments/tate_fetch.sh regenerates it byte-for-byte (verified with diff) and takes STRIDE=1 for the full 69k collection.
+3. At-scale results (3,458 records): `share` — the collection is dominated by "on paper, unique" (2,437, 70%: the Turner Bequest) and "on paper, print" (651); paintings are only 215 (6%). Every classification is 100% long-tail (no highlight flag — known limitation). `tags` — 2,595 distinct tags; top terms are Turner's landscape vocabulary (mountain 442, river 426, man 420, hill 398, "townscape, distant" 397). `tags --rare` — 1,345 tags (52%) appear exactly once and are wonderfully specific: "'Bismarck', sinking, 27 May 1941", "'Discobolus', sculpture", "1 Kings, chapter 19", "Abbey of St-Mathieu". The rare-tags view IS the long-tail story for this source and improves with scale (52% singletons at 3.5k vs similar at 290 — the vocabulary keeps growing).
+4. tail/show/filters verified at scale: --begin 1900 -> 964 records (Liebermann, Kounellis); --department sculpture -> 122 (Gilbert terracotta, Hamada stoneware); --seed reproducible; show renders full records.
+License/public-domain status: CC0 1.0, same pinned snapshot as Run 6.
+Copied or adapted material: yes — 3,458 CC0 metadata records in converted form, superset-style expansion of the Run-6 copy (THIRD_PARTY_NOTICES.md Item 2 updated).
+Attribution needed: no (CC0; source + commit SHA recorded anyway).
+Next action: Run 8 — the tool has real data and works; make it feel like ONE thing: rename met_tail.py -> longtail.py (source-neutral, DECISIONS note), point it at tate_stratified.jsonl by default, and surface the rare-tags view in the README quickstart so a human can run something interesting in one command. Alternative if renaming feels cosmetic: add a `random-rare` subcommand (pick a singleton tag, show its one artwork) — a one-command "neglected artifact generator" that is the mission in miniature.
