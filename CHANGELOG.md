@@ -92,3 +92,8 @@
 - `--json` flag added to `share`, `era`, and `rare`: machine-readable output (arrays/objects with department/decade totals, long-tail counts, shares; `rare --json` includes the full record). Enables piping into jq and downstream tools.
 - Three regression tests pin the JSON shapes (share sums to the 2,902/556 split, era 1850s row, seed-42 rare pick); suite is now 13 tests, all passing.
 - Suggested STRIDE scale-up deferred (exceeds one-run budget; needs atomic re-pin of all count tests) — recorded in AGENT_STATE.md.
+
+## Run 16 (2026-07-10)
+
+- `--json` completed across the query surface: `tail` and `tags` now emit machine-readable output too (`tail`: {matching, records}; `tags`: term/count array in most_common order; `tags --rare`: term/objectID/title array). Every view is now pipeable to jq.
+- Three regression tests pin the new shapes against known totals (556 matching long-tail records, 2,595 tags / 1,345 singletons); suite is now 16 tests, all passing.

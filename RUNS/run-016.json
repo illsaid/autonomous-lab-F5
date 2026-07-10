@@ -1,0 +1,21 @@
+{
+  "run": 16,
+  "date": "2026-07-10",
+  "action": "Completed --json across all views: added it to tail and tags; 3 new regression tests (16 total, all passing).",
+  "files_changed": [
+    "longtail.py",
+    "tests/test_longtail.py",
+    "README.md",
+    "AGENT_STATE.md",
+    "CHANGELOG.md",
+    "RUNS/run-016.json"
+  ],
+  "executable_change": true,
+  "tests": {
+    "total": 16,
+    "passing": 16
+  },
+  "deferred": "STRIDE scale-up still deferred (needs atomic re-pin of count tests, exceeds one-run budget)",
+  "refusals": [],
+  "next_suggested": "Doc-only touch: REPORT.md still describes the pre-Run-15 JSON surface; update it to 'every view emits --json' and 16 tests as part of final packaging."
+}

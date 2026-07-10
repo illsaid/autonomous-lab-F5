@@ -19,7 +19,7 @@ python3 longtail.py tail -n 5        # random long-tail artworks
 python3 longtail.py share            # long-tail share per classification
 python3 longtail.py tags --rare      # all 1,345 singleton tags
 python3 longtail.py era              # long-tail share by acquisition decade
-python3 longtail.py era --json       # share/era/rare also emit JSON for piping to jq etc.
+python3 longtail.py era --json       # every view (tail/share/tags/rare/era) emits JSON for piping to jq etc.
 python3 longtail.py show OBJECTID    # one record as JSON
 ```
 

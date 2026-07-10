@@ -134,6 +134,31 @@ class TestJSONOutput(unittest.TestCase):
         self.assertEqual(out["singletonTags"], 1345)
         self.assertIn("trout", out["tag"])
 
+    def test_tail_json_shape_and_matching_count(self):
+        r = run_cli("tail", "--seed", "1", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = json.loads(r.stdout)
+        self.assertEqual(out["matching"], 556)
+        self.assertEqual(len(out["records"]), 5)
+        self.assertTrue(all("objectID" in rec for rec in out["records"]))
+
+    def test_tags_json_pins_tag_counts(self):
+        r = run_cli("tags", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        rows = json.loads(r.stdout)
+        self.assertEqual(len(rows), 2595)
+        self.assertEqual(sum(1 for x in rows if x["count"] == 1), 1345)
+        # most_common ordering: counts are non-increasing
+        counts = [x["count"] for x in rows]
+        self.assertEqual(counts, sorted(counts, reverse=True))
+
+    def test_tags_rare_json_lists_all_singletons(self):
+        r = run_cli("tags", "--rare", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        rows = json.loads(r.stdout)
+        self.assertEqual(len(rows), 1345)
+        self.assertEqual({"term", "objectID", "title"}, set(rows[0]))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

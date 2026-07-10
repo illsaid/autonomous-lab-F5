@@ -22,9 +22,9 @@ to regenerate or scale it). Use --data to point at any other extract,
 e.g. experiments/met_fixture.jsonl.
 
 Usage:
-  python3 longtail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S]
+  python3 longtail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S] [--json]
   python3 longtail.py share [--json]
-  python3 longtail.py tags [--rare]
+  python3 longtail.py tags [--rare] [--json]
   python3 longtail.py rare [--seed S] [--json]
   python3 longtail.py era [--json]
   python3 longtail.py show OBJECTID
@@ -83,10 +83,19 @@ def cmd_tail(args):
     if args.end is not None:
         rs = [r for r in rs if isinstance(r.get("objectBeginDate"), int) and r["objectBeginDate"] <= args.end]
     if not rs:
-        print("no never-highlighted public-domain objects match")
+        if args.json:
+            json.dump({"matching": 0, "records": []}, sys.stdout)
+            print()
+        else:
+            print("no never-highlighted public-domain objects match")
         return
     rng = random.Random(args.seed)
     picks = rng.sample(rs, min(args.n, len(rs)))
+    if args.json:
+        json.dump({"matching": len(rs), "records": picks},
+                  sys.stdout, indent=2, ensure_ascii=False)
+        print()
+        return
     print(f"{len(picks)} of {len(rs)} matching long-tail objects:")
     for r in picks:
         print(fmt(r))
@@ -123,6 +132,16 @@ def cmd_tags(args):
             if term:
                 freq[term] += 1
                 carriers[term].append(r)
+    if args.json:
+        if args.rare:
+            out = [{"term": t, "objectID": carriers[t][0].get("objectID"),
+                    "title": carriers[t][0].get("title")}
+                   for t in sorted(t for t, c in freq.items() if c == 1)]
+        else:
+            out = [{"term": t, "count": c} for t, c in freq.most_common()]
+        json.dump(out, sys.stdout, indent=2, ensure_ascii=False)
+        print()
+        return
     if not freq:
         print("no tags in data")
         return
@@ -233,12 +252,14 @@ def main():
     sp.add_argument("--begin", type=int, help="objects ending at/after this year (negative = BC)")
     sp.add_argument("--end", type=int, help="objects beginning at/before this year")
     sp.add_argument("--seed", type=int, help="random seed for reproducible output")
+    sp.add_argument("--json", action="store_true", help="machine-readable output")
     sp.set_defaults(fn=cmd_tail)
     sp = sub.add_parser("share", help="per-department long-tail share")
     sp.add_argument("--json", action="store_true", help="machine-readable output")
     sp.set_defaults(fn=cmd_share)
     sp = sub.add_parser("tags", help="tag frequency")
     sp.add_argument("--rare", action="store_true", help="tags appearing exactly once")
+    sp.add_argument("--json", action="store_true", help="machine-readable output")
     sp.set_defaults(fn=cmd_tags)
     sp = sub.add_parser("rare", help="one random singleton tag and its lone artwork")
     sp.add_argument("--seed", type=int, help="random seed for reproducible output")

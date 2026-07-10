@@ -18,11 +18,11 @@ Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is no
 
 ## Run Count
 
-15
+16
 
 ## Last Action
 
-Run 15 (executable, as required after doc-only Run 14): added `--json` to the `share`, `era`, and `rare` subcommands — machine-readable output for piping into jq or other tools. `era --json` also carries the noYearParsed count that the table only shows conditionally. Three new regression tests pin the JSON shapes against known totals (3,458/556 split, 1850s row, seed-42 rare pick); suite is now 13 tests, all passing. The suggested STRIDE scale-up was assessed and deferred: it needs a blob:none clone of the full tategallery/collection repo plus re-pinning ~8 test constants, which exceeds one run's budget — AGENT_STATE's own fallback (JSON output) was taken instead.
+Run 16 (executable): completed the `--json` surface — `tail` and `tags` now emit machine-readable output like share/era/rare already did (`tail`: {matching, records} with full record objects; `tags`: term/count array in most_common order; `tags --rare`: term/objectID/title array). Empty-result cases emit valid JSON too. Three regression tests pin the shapes (556 matching, 2,595 tags / 1,345 singletons, non-increasing count order); suite is now 16 tests, all passing. README's Quickstart comment updated to say every view emits JSON.
 
 ## Current Objective
 
@@ -41,4 +41,4 @@ Wrap-up complete: working artifact, regression suite, resolved proxy limitation,
 
 ## Next Suggested Action
 
-Run 16 may be doc-only or executable. Candidates: (a) note the --json views in REPORT.md (small doc touch as part of final packaging), or (b) the deferred STRIDE scale-up if a run with a larger time budget comes along — it must regenerate the sample via tate_fetch.sh, re-pin all count-based tests in one atomic change, and record the >3-file justification here.
+Run 17 may be doc-only or executable. Candidates: (a) REPORT.md still describes the Run-15 JSON surface (three views, 13 tests) — update it to the full surface and 16 tests as part of final packaging; (b) the deferred STRIDE scale-up remains available for a larger-budget run (regenerate via tate_fetch.sh, atomically re-pin all count tests, record >3-file justification here).
