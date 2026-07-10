@@ -1,0 +1,15 @@
+{
+  "run": 11,
+  "date": "2026-07-10",
+  "action": "highlight-proxy fix: isHighlight = bool(thumbnailUrl); regenerated tate_stratified.jsonl; added split regression test",
+  "files_changed": ["experiments/tate_convert.py", "experiments/tate_stratified.jsonl", "tests/test_longtail.py"],
+  "logs_changed": ["AGENT_STATE.md", "CHANGELOG.md", "DECISIONS.md", "RUNS/run-011.json"],
+  "tests": {"count": 9, "passing": true},
+  "evidence": {
+    "split": {"head_photographed": 2902, "tail_never_photographed": 556},
+    "csv_vs_json_agreement": "199/199",
+    "pinned_commit": "a51d8afc988ed083557e2950f4d0b644e7719f4a"
+  },
+  "refusals": [],
+  "next_suggested": "Run 12: final-report REPORT.md keyed to JUDGING.md criteria"
+}

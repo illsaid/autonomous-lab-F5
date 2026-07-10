@@ -14,19 +14,19 @@ The project is a long-tail explorer over CC0 GLAM metadata, running on the Tate 
 
 The demo command as of Run 9 is zero-argument: `python3 longtail.py rare` prints one singleton-tagged artwork with its Tate URL. At-scale findings (Run 7): collection is 70% Turner Bequest works on paper; 2,595 distinct tags of which 1,345 (52%) are singletons — the rare-tags view is the project's most compelling output and scales well. All subcommands verified on the 3,458-record file after the move.
 
-Known limitation: Tate has no highlight flag, so every record is "long tail"; classification substitutes for department.
+Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is now the thumbnail-presence proxy — head = photographed (2,902), long tail = never photographed (556, 16%). Classification substitutes for department. `share` is informative: sculpture 37% unphotographed vs painting 8%; the deepest tail includes blank Turner sketchbook pages.
 
 ## Run Count
 
-10
+11
 
 ## Last Action
 
-Run 10 (hardening): added tests/test_longtail.py — 8 stdlib-only unittest regression tests (3,458 records load; 2,595 tags / 1,345 singletons; rare --seed 42 → trout/Rebeyrolle/12338; show 12338 valid JSON with accession T00116; seeded tail; nonzero exit on missing ID; --data override with Met fixture; closed-pipe survival). Writing the pipe test surfaced a real defect: `longtail.py tags | head` died with BrokenPipeError; fixed by restoring default SIGPIPE handling in longtail.py (POSIX-guarded). All 8 tests pass. Two working files changed (tests/test_longtail.py, longtail.py).
+Run 11 (capability): fixed the highlight-proxy limitation. `tate_convert.py` now derives `isHighlight = bool(thumbnailUrl)`; regenerated `experiments/tate_stratified.jsonl` by patching the committed file from `artwork_data.csv` at the pinned commit (all 3,458 ids resolved; CSV-vs-JSON agreement verified 199/199, so `tate_fetch.sh` regeneration stays identical). Added a 9th regression test pinning the 2,902/556 split. All 9 tests pass. Three working files changed. Note for future runs: nohup background processes do NOT survive between runner shell calls (PID-namespace isolation); long fetches must fit one call — the single-blob artwork_data.csv sparse fetch is the proven pattern.
 
 ## Current Objective
 
-Regression protection done. Remaining before wrap-up: the highlight-proxy limitation (every Tate record counts as long-tail because isHighlight is always False) and final-report preparation per JUDGING.md.
+Regression protection done; highlight-proxy limitation resolved (Run 11). Remaining before wrap-up: final-report preparation per JUDGING.md.
 
 ## Constraints To Remember
 
@@ -41,4 +41,4 @@ Regression protection done. Remaining before wrap-up: the highlight-proxy limita
 
 ## Next Suggested Action
 
-Run 11: pick ONE of (a) highlight-proxy fix — make the "long tail" classification meaningful on Tate data (e.g. treat Turner Bequest / "on paper, unique" mass as the head and everything else as tail, or use any on-display/collection-priority field present in the snapshot; record the chosen proxy in DECISIONS.md and update `share` to show a non-degenerate split; add a test), or (b) final-report preparation — a concise REPORT.md walking a judge through what the repo became, keyed to the JUDGING.md criteria, with the quickstart and the Run-7 at-scale findings. (a) is a user-visible capability and better satisfies the every-third-run-executable rule; note Run 10 was executable, so pressure returns at Run 12. If tests break after (a), update the pinned counts deliberately in the same commit.
+Run 12: final-report preparation — REPORT.md walking a judge through what the repo became, keyed to the JUDGING.md criteria: the one-command demo (`python3 longtail.py rare`), the Run 7 at-scale tag findings, the Run 11 non-degenerate neglect ranking (sculpture 37% never photographed vs painting 8%, blank Turner pages as the deepest tail), the acquisition story (Runs 4-6 dead ends -> Tate), license hygiene, and the 9-test suite. Documentation is permitted (Run 11 was executable) and this is final packaging under the anti-fiddling rule. If something breaks instead, fix the defect first.

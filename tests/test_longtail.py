@@ -44,6 +44,14 @@ class TestData(unittest.TestCase):
         self.assertEqual(len(freq), 2595)
         self.assertEqual(sum(1 for c in freq.values() if c == 1), 1345)
 
+    def test_highlight_proxy_split_is_non_degenerate(self):
+        # Run 11: isHighlight = thumbnail presence (DECISIONS.md); the long
+        # tail is the never-photographed remainder, not the whole file.
+        records = longtail.load(DATA)
+        lt = sum(1 for r in records if longtail.is_long_tail(r))
+        self.assertEqual(lt, 556)
+        self.assertEqual(len(records) - lt, 2902)
+
 
 class TestCLI(unittest.TestCase):
     def test_rare_seed_42_is_reproducible(self):

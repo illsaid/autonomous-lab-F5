@@ -64,3 +64,9 @@
 
 - Added `tests/test_longtail.py` (stdlib-only, unittest): 8 regression tests pinning known-good behavior — 3,458 records load from the default data, 2,595 distinct tags / 1,345 singletons, `rare --seed 42` reproduces trout/Rebeyrolle/12338, `show 12338` returns valid JSON with accession T00116, seeded `tail` runs, missing objectID exits nonzero, `--data` override works with the Met fixture, and piped output survives a closed pipe. Run with `python3 tests/test_longtail.py`. All pass.
 - Fixed a real defect found while writing the tests: `python3 longtail.py tags | head` died with BrokenPipeError; longtail.py now restores default SIGPIPE handling (POSIX only, guarded with hasattr).
+
+## Run 11 (2026-07-10)
+
+- Highlight proxy fixed: `tate_convert.py` now sets `isHighlight = bool(thumbnailUrl)`; `experiments/tate_stratified.jsonl` regenerated (2,902 head / 556 never-photographed tail). `share` is no longer a degenerate 100% column.
+- Proxy validated against raw artwork JSON (199/199 agree) at pinned commit a51d8af; see DECISIONS.md Run 11.
+- New regression test pins the 2,902/556 split (9 tests total, all passing).

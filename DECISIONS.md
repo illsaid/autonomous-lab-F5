@@ -66,3 +66,16 @@ Next build step: scale the sample up (artwork_data.csv is a single 24 MB plain b
 Decision: the query CLI is the project's primary artifact, so it moves out of experiments/ to the repo root under a source-neutral name, with DEFAULT_DATA switched from the 12-record fixture to experiments/tate_stratified.jsonl (3,458 real CC0 records). `python3 longtail.py rare` now works with zero arguments after a plain clone — the mission demonstrated in one command.
 
 Rationale: convergence was justified in Runs 4–7 (evidence in RESEARCH_LOG.md); Run 8 built the demo subcommand; this run makes the repo read as one coherent runnable thing rather than an experiments folder. The name "met_tail" was wrong twice over (source pivoted to Tate in Run 6; scope is CC0 GLAM generally). No stub left at the old path — git history records the rename, and nothing in the repo invoked the old path programmatically. Comments in tate_convert.py/tate_fetch.sh still say "met_tail JSONL schema" as a schema name; left unchanged deliberately (anti-fiddling rule).
+
+## Run 11 — Highlight proxy: isHighlight = thumbnail presence
+
+Decision: on Tate data, `isHighlight` is now derived as `bool(thumbnailUrl)` — an artwork the museum has photographed counts as the "head"; the long tail is public-domain works that have NEVER been photographed. This replaces the degenerate constant `isHighlight: False` (Run 6 known limitation) and was the option already flagged in the Run 6 decision note.
+
+Evidence:
+
+- `artwork_data.csv` at the pinned commit a51d8af carries `thumbnailUrl` for all 69,201 ids; every one of the 3,458 sampled records resolved.
+- Cross-validation: CSV `thumbnailUrl` vs the artwork JSON `thumbnailUrl` field agrees on 199/199 records across two sampled directories (artworks/a/000, artworks/t/070), so `tate_fetch.sh` + the updated `tate_convert.py` regenerate the committed file identically.
+- Resulting split is non-degenerate and informative: 556/3,458 (16%) never photographed. `share` now ranks: sculpture 37% unphotographed, prints 21%, works on paper 14%, painting 8% — neglect concentrates in three-dimensional and mass-bequest material, exactly the pattern the Run 4 sketch question asked about.
+- Bonus finding: the deepest tail includes literally blank Turner sketchbook pages (e.g. ids 64130, 38383, "Blank", c.1809–16) — catalogued, accessioned, never photographed.
+
+Semantics note: the proxy inverts the Met framing. Met's tail was "visible but never celebrated" (has image, not highlight); Tate's tail is "never even photographed". Both are attention proxies; the CLI wording ("never-highlighted") and `is_long_tail()` are unchanged, so Met-schema files still work via --data.

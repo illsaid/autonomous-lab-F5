@@ -21,10 +21,12 @@ Field mapping (Tate -> met_tail schema):
   url               -> objectURL
   subjects tree leaves -> tags [{"term": name}]
   isPublicDomain    -> True  (metadata is CC0; images NOT included/covered)
-  isHighlight       -> False (Tate publishes no highlight flag; recorded
-                              as a known limitation — the 'share' view is
-                              therefore classification coverage, not a
-                              true highlight split)
+  isHighlight       -> bool(thumbnailUrl)  (Tate publishes no highlight
+                              flag; photographed-vs-never-photographed is
+                              the proxy adopted in DECISIONS.md Run 11 —
+                              works with no thumbnail have received the
+                              least institutional attention, so the long
+                              tail = public-domain AND never photographed)
   source            -> "tategallery/collection@HEAD (CC0)"
 
 Usage:
@@ -58,7 +60,7 @@ def convert(rec):
         "objectID": rec.get("id"),
         "accessionNumber": rec.get("acno"),
         "isPublicDomain": True,
-        "isHighlight": False,
+        "isHighlight": bool(rec.get("thumbnailUrl")),
         "title": rec.get("title") or "(untitled)",
         "artistDisplayName": rec.get("all_artists") or "",
         "objectDate": rec.get("dateText") or "",
