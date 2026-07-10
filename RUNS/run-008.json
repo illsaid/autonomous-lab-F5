@@ -1,0 +1,18 @@
+{
+  "run": 8,
+  "date": "2026-07-09",
+  "type": "executable",
+  "phase": "converge",
+  "action": "Added `rare` subcommand to experiments/met_tail.py: picks one random singleton tag (reproducible with --seed) and prints the single artwork that carries it, with objectURL.",
+  "files_changed": ["experiments/met_tail.py"],
+  "mandatory_logs": ["AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-008.json"],
+  "tests": [
+    "rare --seed 42 on tate_stratified.jsonl: deterministic (tag 'trout' -> objectID 12338), verified twice",
+    "rare without seed: random singleton returned",
+    "rare on default fixture: works, 11/13 singletons reported",
+    "counts match tags --rare at scale: 2595 tags, 1345 singletons over 3458 records",
+    "tail/share/tags/tags --rare re-verified unchanged"
+  ],
+  "refusals": [],
+  "next_suggested": "Run 9: promote tool to repo root as longtail.py with DEFAULT_DATA=experiments/tate_stratified.jsonl, record rename in DECISIONS.md, rewrite README quickstart around `python3 longtail.py rare`."
+}

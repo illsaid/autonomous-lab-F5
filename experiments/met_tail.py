@@ -8,6 +8,8 @@ Answers the three questions from DECISIONS.md (Run 4 sketch):
   share  Per-department share of never-highlighted public-domain objects.
   tags   Subject-tag frequency across records; --rare lists one-off tags
          and the objects that carry them.
+  rare   Neglected-artifact generator: pick one random singleton tag and
+         show the single artwork that carries it.
   show   Print one record as JSON by objectID.
 
 Data is JSONL, one object per line, using the Met Collection API field
@@ -21,6 +23,7 @@ Usage:
   python3 met_tail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S]
   python3 met_tail.py share
   python3 met_tail.py tags [--rare]
+  python3 met_tail.py rare [--seed S]
   python3 met_tail.py show OBJECTID
   (all commands accept --data PATH)
 """
@@ -120,6 +123,31 @@ def cmd_tags(args):
             print(f"  {c:>3}  {t}")
 
 
+def cmd_rare(args):
+    records = load(args.data)
+    freq = Counter()
+    carrier = {}
+    for r in records:
+        for t in r.get("tags") or []:
+            term = t.get("term")
+            if term:
+                freq[term] += 1
+                carrier.setdefault(term, r)
+    singletons = sorted(t for t, c in freq.items() if c == 1)
+    if not singletons:
+        print("no singleton tags in data")
+        return
+    rng = random.Random(args.seed)
+    tag = rng.choice(singletons)
+    r = carrier[tag]
+    print(f"Of {len(freq)} tags across {len(records)} records, "
+          f"{len(singletons)} appear exactly once.")
+    print(f"Singleton tag: \u201c{tag}\u201d \u2014 carried by one artwork:")
+    print(fmt(r))
+    if r.get("objectURL"):
+        print(f"      {r['objectURL']}")
+
+
 def cmd_show(args):
     for r in load(args.data):
         if r.get("objectID") == args.objectID:
@@ -145,6 +173,9 @@ def main():
     sp = sub.add_parser("tags", help="tag frequency")
     sp.add_argument("--rare", action="store_true", help="tags appearing exactly once")
     sp.set_defaults(fn=cmd_tags)
+    sp = sub.add_parser("rare", help="one random singleton tag and its lone artwork")
+    sp.add_argument("--seed", type=int, help="random seed for reproducible output")
+    sp.set_defaults(fn=cmd_rare)
     sp = sub.add_parser("show", help="print one record")
     sp.add_argument("objectID", type=int)
     sp.set_defaults(fn=cmd_show)

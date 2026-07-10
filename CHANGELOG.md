@@ -47,3 +47,9 @@
 - Scaled real data ~12x: `experiments/tate_stratified.jsonl` — 3,458 CC0 records (2.4 MB), a deterministic stratified sample (every 20th of 738 artwork subdirs at pinned commit a51d8af, proportional across all 6 accession prefixes). Chose the JSON route over artwork_data.csv because the CSV lacks the subjects tree that feeds tags/--rare.
 - Added `experiments/tate_fetch.sh`: regenerates the sample byte-for-byte (verified by diff) via blob:none clone + sparse-checkout; `STRIDE=1` fetches the full 69,202-record collection.
 - Verified met_tail.py at scale: share (70% Turner-Bequest "on paper, unique"), tags (2,595 distinct), tags --rare (1,345 singletons, 52% — the long-tail story), tail/show/date/department filters, reproducible --seed. Findings in RESEARCH_LOG.md.
+
+## Run 8 — 2026-07-09
+
+- Added `rare` subcommand to `experiments/met_tail.py`: the neglected-artifact generator. Picks one random singleton tag (deterministic with `--seed`) and prints the lone artwork carrying it, including its tate.org.uk URL — the project mission demonstrated in one command.
+- Tested: reproducible with `--seed 42` (tag "trout" → Rebeyrolle, *Trout*, 1956), random without seed, correct counts at scale (2,595 tags / 1,345 singletons on the 3,458-record stratified sample), graceful on tag-free data, works on the fixture; `tail`, `share`, `tags --rare` re-verified unchanged.
+- No new data sources (per Run-7 convergence plan). One working file changed.

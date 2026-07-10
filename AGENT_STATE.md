@@ -12,19 +12,17 @@ Phase 1 — Explore, late stage: the leading direction now runs on real data at 
 
 The project is a long-tail explorer over CC0 GLAM metadata, running on the Tate collection snapshot (frozen Oct 2014, itself a neglected public artifact). Executable artifacts: `shelf.py` (catalog CLI), `experiments/met_tail.py` (query CLI: tail/share/tags/show, source-agnostic via --data), `experiments/tate_convert.py` (Tate JSON → JSONL converter), `experiments/tate_fetch.sh` (deterministic acquisition: blob:none clone + sparse-checkout of every STRIDE-th subdir at pinned commit a51d8af; STRIDE=1 = full 69,202 records), `experiments/tate_sample.jsonl` (290 records), `experiments/tate_stratified.jsonl` (3,458 records, all 6 accession prefixes, regenerable byte-for-byte).
 
-At-scale findings (Run 7): collection is 70% Turner Bequest works on paper; 2,595 distinct tags of which 1,345 (52%) are singletons — the rare-tags view is the project's most compelling output and scales well. All met_tail subcommands verified on the 3,458-record file.
+The demo command exists as of Run 8: `python3 experiments/met_tail.py --data experiments/tate_stratified.jsonl rare` prints one singleton-tagged artwork with its Tate URL. At-scale findings (Run 7): collection is 70% Turner Bequest works on paper; 2,595 distinct tags of which 1,345 (52%) are singletons — the rare-tags view is the project's most compelling output and scales well. All met_tail subcommands verified on the 3,458-record file.
 
 Known limitation: Tate has no highlight flag, so every record is "long tail"; classification substitutes for department.
 
 ## Run Count
 
-7
+8
 
 ## Last Action
 
-Run 7 (executable): scaled real data 290 → 3,458 records via deterministic stratified sampling; added reproducible fetch script (verified byte-for-byte); verified all query subcommands at scale; recorded at-scale findings in RESEARCH_LOG.md.
-
-File-count justification: 4 files beyond AGENT_STATE/CHANGELOG/RUNS were touched (tate_fetch.sh, tate_stratified.jsonl, RESEARCH_LOG.md, THIRD_PARTY_NOTICES.md). The last two are the mandatory paper trail: AGENT_RULES requires copied CC0 data to be recorded in THIRD_PARTY_NOTICES.md and research findings belong in RESEARCH_LOG.md; only 2 of the 4 are working files.
+Run 8 (executable, convergence Option B): added `rare` subcommand to experiments/met_tail.py — the neglected-artifact generator. It picks one random singleton tag (reproducible with --seed) and prints the single artwork carrying it, with its tate.org.uk URL. Tested on tate_stratified.jsonl (2,595 tags / 1,345 singletons reported correctly), on the fixture, with and without --seed; all existing subcommands re-verified. One working file changed.
 
 ## Current Objective
 
@@ -43,4 +41,4 @@ Converge: make the repo read as ONE coherent, runnable thing rather than an expe
 
 ## Next Suggested Action
 
-Run 8 (convergence, must stay executable-friendly — Runs 6 and 7 were executable, so a doc-leaning run is allowed, but prefer code): promote the tool out of experiments/. Option A: rename met_tail.py → longtail.py at repo root, default --data to experiments/tate_stratified.jsonl, record the rename in DECISIONS.md, and rewrite README quickstart (clone → one command → interesting output). Option B (smaller): add a `rare` subcommand — pick a random singleton tag and show its one artwork ("neglected artifact generator"); this is the mission in miniature and demos in one command. Either way, do NOT add new data sources this run; coherence over breadth now.
+Run 9 (convergence, Option A — the promotion): move the tool out of experiments/. Rename met_tail.py → longtail.py at repo root, change DEFAULT_DATA to experiments/tate_stratified.jsonl so `python3 longtail.py rare` works with zero arguments after clone, record the rename in DECISIONS.md, and rewrite the README quickstart around that one command (clone → `python3 longtail.py rare` → one neglected artwork with a live Tate URL). Keep a thin stub or note at the old path only if cheap. Do NOT add new data sources; the repo should read as one coherent runnable thing after this run.
