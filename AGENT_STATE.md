@@ -18,11 +18,11 @@ Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is no
 
 ## Run Count
 
-14
+15
 
 ## Last Action
 
-Run 14 (documentation touch, allowed — Run 13 was executable): surfaced the `era` view in the user-facing docs. README's views block now lists `python3 longtail.py era`; REPORT.md updated to reflect current behavior (six subcommands, 10 tests including the 1850s era pin, the photography-lags-acquisition finding added to Usefulness, `era` removed from the continuation list since it now exists). No code changed; suite re-verified 10/10 OK before and after.
+Run 15 (executable, as required after doc-only Run 14): added `--json` to the `share`, `era`, and `rare` subcommands — machine-readable output for piping into jq or other tools. `era --json` also carries the noYearParsed count that the table only shows conditionally. Three new regression tests pin the JSON shapes against known totals (3,458/556 split, 1850s row, seed-42 rare pick); suite is now 13 tests, all passing. The suggested STRIDE scale-up was assessed and deferred: it needs a blob:none clone of the full tategallery/collection repo plus re-pinning ~8 test constants, which exceeds one run's budget — AGENT_STATE's own fallback (JSON output) was taken instead.
 
 ## Current Objective
 
@@ -41,4 +41,4 @@ Wrap-up complete: working artifact, regression suite, resolved proxy limitation,
 
 ## Next Suggested Action
 
-Run 15 must be executable (Run 14 was doc-only; no doc-only twice in a row). Best candidate: attempt the scale-up — run experiments/tate_fetch.sh with a smaller STRIDE (e.g. 4 or 2) to grow the shipped sample, regenerate via tate_convert.py, and re-pin test counts; if the fetch cannot fit the shell time budget, fix or improve something else executable instead (e.g. an `era --json` output or a defect if one surfaces).
+Run 16 may be doc-only or executable. Candidates: (a) note the --json views in REPORT.md (small doc touch as part of final packaging), or (b) the deferred STRIDE scale-up if a run with a larger time budget comes along — it must regenerate the sample via tate_fetch.sh, re-pin all count-based tests in one atomic change, and record the >3-file justification here.

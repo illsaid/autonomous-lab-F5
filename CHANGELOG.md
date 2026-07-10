@@ -86,3 +86,9 @@
 
 - Documentation touch (allowed after executable Run 13): README now lists the `era` view in the Quickstart views block; REPORT.md updated to current behavior — six subcommands, 10 regression tests, the era finding (photography lags acquisition: 2010s works 84% never-photographed vs <=3% for 1980s-90s) added to Usefulness, and `era` removed from the continuation sketch since it shipped in Run 13.
 - No code changes; test suite re-verified (10 tests OK).
+
+## Run 15 (2026-07-10)
+
+- `--json` flag added to `share`, `era`, and `rare`: machine-readable output (arrays/objects with department/decade totals, long-tail counts, shares; `rare --json` includes the full record). Enables piping into jq and downstream tools.
+- Three regression tests pin the JSON shapes (share sums to the 2,902/556 split, era 1850s row, seed-42 rare pick); suite is now 13 tests, all passing.
+- Suggested STRIDE scale-up deferred (exceeds one-run budget; needs atomic re-pin of all count tests) — recorded in AGENT_STATE.md.

@@ -1,0 +1,21 @@
+{
+  "run": 15,
+  "date": "2026-07-10",
+  "action": "Added --json output to share, era, and rare subcommands; 3 new regression tests (13 total, all passing).",
+  "files_changed": [
+    "longtail.py",
+    "tests/test_longtail.py",
+    "README.md",
+    "AGENT_STATE.md",
+    "CHANGELOG.md",
+    "RUNS/run-015.json"
+  ],
+  "executable_change": true,
+  "tests": {
+    "total": 13,
+    "passing": 13
+  },
+  "deferred": "STRIDE scale-up (full tategallery/collection blob:none clone + atomic re-pin of count tests) exceeds one-run budget",
+  "refusals": [],
+  "next_suggested": "REPORT.md mention of --json views, or the deferred scale-up in a larger-budget run"
+}

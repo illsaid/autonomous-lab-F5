@@ -23,10 +23,10 @@ e.g. experiments/met_fixture.jsonl.
 
 Usage:
   python3 longtail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S]
-  python3 longtail.py share
+  python3 longtail.py share [--json]
   python3 longtail.py tags [--rare]
-  python3 longtail.py rare [--seed S]
-  python3 longtail.py era
+  python3 longtail.py rare [--seed S] [--json]
+  python3 longtail.py era [--json]
   python3 longtail.py show OBJECTID
   (all commands accept --data PATH)
 """
@@ -100,6 +100,12 @@ def cmd_share(args):
         if is_long_tail(r):
             by_dept[d][1] += 1
     rows = sorted(by_dept.items(), key=lambda kv: (-(kv[1][1] / kv[1][0]), kv[0]))
+    if args.json:
+        json.dump([{"department": d, "total": t, "longTail": lt,
+                    "share": round(lt / t, 4)} for d, (t, lt) in rows],
+                  sys.stdout, indent=2, ensure_ascii=False)
+        print()
+        return
     w = max(len(d) for d, _ in rows)
     print(f"{'department':<{w}}  total  long-tail  share")
     for d, (total, lt) in rows:
@@ -149,6 +155,12 @@ def cmd_rare(args):
     rng = random.Random(args.seed)
     tag = rng.choice(singletons)
     r = carrier[tag]
+    if args.json:
+        json.dump({"tag": tag, "distinctTags": len(freq),
+                   "singletonTags": len(singletons), "record": r},
+                  sys.stdout, indent=2, ensure_ascii=False)
+        print()
+        return
     print(f"Of {len(freq)} tags across {len(records)} records, "
           f"{len(singletons)} appear exactly once.")
     print(f"Singleton tag: \u201c{tag}\u201d \u2014 carried by one artwork:")
@@ -181,6 +193,14 @@ def cmd_era(args):
         by_dec[d][0] += 1
         if is_long_tail(r):
             by_dec[d][1] += 1
+    if args.json:
+        json.dump({"decades": [{"decade": d, "total": t, "longTail": lt,
+                                "share": round(lt / t, 4)}
+                               for d, (t, lt) in sorted(by_dec.items())],
+                   "noYearParsed": unknown},
+                  sys.stdout, indent=2, ensure_ascii=False)
+        print()
+        return
     if not by_dec:
         print("no acquisition years parsed from creditLine")
         return
@@ -214,14 +234,19 @@ def main():
     sp.add_argument("--end", type=int, help="objects beginning at/before this year")
     sp.add_argument("--seed", type=int, help="random seed for reproducible output")
     sp.set_defaults(fn=cmd_tail)
-    sub.add_parser("share", help="per-department long-tail share").set_defaults(fn=cmd_share)
+    sp = sub.add_parser("share", help="per-department long-tail share")
+    sp.add_argument("--json", action="store_true", help="machine-readable output")
+    sp.set_defaults(fn=cmd_share)
     sp = sub.add_parser("tags", help="tag frequency")
     sp.add_argument("--rare", action="store_true", help="tags appearing exactly once")
     sp.set_defaults(fn=cmd_tags)
     sp = sub.add_parser("rare", help="one random singleton tag and its lone artwork")
     sp.add_argument("--seed", type=int, help="random seed for reproducible output")
+    sp.add_argument("--json", action="store_true", help="machine-readable output")
     sp.set_defaults(fn=cmd_rare)
-    sub.add_parser("era", help="long-tail share by acquisition decade").set_defaults(fn=cmd_era)
+    sp = sub.add_parser("era", help="long-tail share by acquisition decade")
+    sp.add_argument("--json", action="store_true", help="machine-readable output")
+    sp.set_defaults(fn=cmd_era)
     sp = sub.add_parser("show", help="print one record")
     sp.add_argument("objectID", type=int)
     sp.set_defaults(fn=cmd_show)

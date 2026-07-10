@@ -108,5 +108,32 @@ class TestCLI(unittest.TestCase):
         self.assertNotIn("BrokenPipeError", stderr)
 
 
+class TestJSONOutput(unittest.TestCase):
+    def test_share_json_sums_to_known_split(self):
+        r = run_cli("share", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        rows = json.loads(r.stdout)
+        self.assertEqual({"department", "total", "longTail", "share"}, set(rows[0]))
+        self.assertEqual(sum(x["total"] for x in rows), 3458)
+        self.assertEqual(sum(x["longTail"] for x in rows), 556)
+
+    def test_era_json_pins_1850s_row(self):
+        r = run_cli("era", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = json.loads(r.stdout)
+        self.assertEqual(out["noYearParsed"], 0)
+        row = next(x for x in out["decades"] if x["decade"] == 1850)
+        self.assertEqual(row["total"], 1885)
+        self.assertEqual(row["longTail"], 261)
+
+    def test_rare_json_seed_42_matches_text_pick(self):
+        r = run_cli("rare", "--seed", "42", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = json.loads(r.stdout)
+        self.assertEqual(out["record"]["objectID"], 12338)
+        self.assertEqual(out["singletonTags"], 1345)
+        self.assertIn("trout", out["tag"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
