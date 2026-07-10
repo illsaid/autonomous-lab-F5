@@ -48,3 +48,15 @@ Pivot condition: if Run 5 shows bulk acquisition is impossible from the runner A
 ## Run 5 note — pivot condition status
 
 Run 5 proved bulk Met acquisition impossible from this environment (all 4 routes blocked; RESEARCH_LOG 2026-07-09 Run 5 entry). That is HALF the pivot condition. The other half — "fixtures feel hollow" — is judged not yet met: `experiments/met_tail.py` answers all 3 sketch questions against a schema-faithful fixture and is data-file-agnostic (--data). One evidence-gathering probe remains before any pivot: Smithsonian/OpenAccess on github.com may ship CC0 metadata as plain git blobs (LFS status unknown), reachable with the promisor-clone technique Run 5 proved. Run 6 decides: real data (generalize explorer to CC0 GLAM) or full pivot to acquisition-first screening of shelved directions.
+
+## Run 6 decision — data-source pivot: Met → Tate
+
+What changed: the long-tail explorer's data source is now the Tate collection snapshot (github.com/tategallery/collection, CC0, frozen Oct 2014) instead of Met Open Access. The direction (long-tail explorer over CC0 GLAM metadata) is unchanged; the tool was already source-agnostic via --data.
+
+Why the prior source was insufficient: Run 5 proved Met bulk acquisition impossible from this runner (all four routes blocked; entire history LFS-migrated). Run 6 proved the same for MoMA (LFS pointers) and Smithsonian (data moved off GitHub to an egress-blocked S3 host); cmoa/collection is deleted.
+
+Evidence for Tate: 69,202 artwork JSON files as plain git blobs on github.com (the one allowlisted host); CC0 1.0 explicit; sparse-checkout batch fetch works (290 records in seconds); met_tail.py ran unchanged against converted real records with all subcommands verified. Bonus mission fit: the repo is itself a neglected public artifact — unmaintained since 2014, kept online only "in case this snapshot is useful".
+
+Known limitation recorded: Tate has no highlight flag, so the "never-highlighted" framing degrades to full-collection browsing for this source; the share view reads as classification coverage. If a highlight-like signal is wanted later, options include Tate's thumbnailUrl presence or ARTIST ROOMS membership.
+
+Next build step: scale the sample up (artwork_data.csv is a single 24 MB plain blob, or more sparse-checkout directories), then re-evaluate the three sketch questions at scale.

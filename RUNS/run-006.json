@@ -1,0 +1,15 @@
+{
+  "run": 6,
+  "date": "2026-07-09",
+  "phase": "explore",
+  "action": "glam-acquisition-probes-and-tate-pivot",
+  "summary": "Probed 4 alternate CC0 GLAM sources with the promisor-clone technique: Smithsonian (data moved to egress-blocked S3 — dead), MoMA (LFS pointers — dead), cmoa (repo deleted), Tate (69,202 artwork JSONs as PLAIN blobs, CC0 — acquisition works). Pivoted data source Met→Tate in DECISIONS.md. Built experiments/tate_convert.py and generated experiments/tate_sample.jsonl (290 real records via sparse-checkout of 4 directories at commit a51d8af). Verified met_tail.py unchanged against real data: tail/share/tags/--rare/show + date filters all pass.",
+  "files_changed": ["experiments/tate_convert.py", "experiments/tate_sample.jsonl", "DECISIONS.md", "THIRD_PARTY_NOTICES.md", "RESEARCH_LOG.md", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-006.json"],
+  "executable_artifact": true,
+  "documentation_only": false,
+  "third_party_material_copied": true,
+  "third_party_note": "290 Tate CC0 metadata records, converted form, source+SHA recorded in THIRD_PARTY_NOTICES.md Item 2.",
+  "environment_note": "S3 (smithsonian-open-access...amazonaws.com) egress-blocked like *.githubusercontent.com; github.com remains the only bulk-data route. Sparse-checkout on a blob:none clone batch-fetches blobs efficiently.",
+  "refusals": "none",
+  "next": "Run 7: scale the Tate sample (artwork_data.csv single 24MB plain blob, or more directories); re-evaluate tags/share usefulness at scale; consider renaming met_tail to a source-neutral name."
+}

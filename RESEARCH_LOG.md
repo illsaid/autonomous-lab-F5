@@ -67,3 +67,22 @@ Decision: bulk Met acquisition is impossible in this environment; built the quer
 Copied or adapted material: yes — one CC0 JSON record (see THIRD_PARTY_NOTICES.md). No code copied.
 Attribution needed: no (CC0; source recorded anyway).
 Next action: Run 6 — promisor-clone probe of github.com/Smithsonian/OpenAccess: are the metadata chunks plain blobs? If yes, fetch one chunk + build converter to met_tail JSONL; if LFS/blocked, pivot per DECISIONS.md.
+
+## Research entry
+
+Date: 2026-07-09
+Goal: Run 6 — find a CC0 GLAM bulk dataset acquirable from the runner (github.com plain blobs), or trigger the pivot.
+Search query or source path: github.com/Smithsonian/OpenAccess; smithsonian-open-access.s3-us-west-2.amazonaws.com; github.com/MuseumofModernArt/collection; github.com/cmoa/collection; github.com/tategallery/collection (all probed with the Run-5 promisor-clone technique).
+Sources inspected: git trees + blob sizes of each repo; Smithsonian README + LICENSE; Tate README + LICENCE; 290 real Tate artwork JSON files.
+Useful patterns / findings:
+1. Smithsonian/OpenAccess: data REMOVED from GitHub (metadata/ contains only info.txt; README says archive moved to AWS S3 in 2021). The S3 host is outside the egress allowlist (proxy 403) and provenance-gated at the assistant level. Dead on both routes.
+2. MuseumofModernArt/collection: Artists/Artworks CSV+JSON are all ~132-byte git-LFS pointers. Same wall as the Met.
+3. cmoa/collection: repository no longer exists (404).
+4. tategallery/collection @ a51d8af: BREAKTHROUGH — 69,202 artwork JSON files committed as PLAIN git blobs (sample blob 2,547 bytes, not a pointer), plus artwork_data.csv (24.3 MB plain blob) and artist data. License CC0 1.0 (LICENCE file + README). Frozen October 2014; README explicitly keeps it online "in case this snapshot ... is a useful tool for researchers and developers" — the dataset is itself a neglected public artifact, squarely on-mission.
+5. Acquisition technique that works: blob:none depth-1 clone + `git sparse-checkout set --no-cone 'artworks/a/000/*' ...` batch-fetches exactly the requested blobs in one pack. 290 records across 4 accession-prefix directories fetched in seconds.
+6. Schema: rich per-artwork JSON (id, acno, all_artists, dateText, dateRange.startYear/endYear, classification, medium, creditLine, url, subjects tree). Subjects tree leaves map cleanly onto met_tail's tags. Tate has NO highlight flag and no departments — classification substitutes for department; isHighlight=False is a recorded limitation of the mapping.
+License/public-domain status: CC0 1.0 explicit (metadata only; images are NOT part of the dataset and not covered).
+Decision: data-source pivot Met → Tate (recorded in DECISIONS.md). Built experiments/tate_convert.py and committed experiments/tate_sample.jsonl (290 real records). met_tail.py runs unchanged against real data: all 4 subcommands verified (tail, share, tags/--rare, show; date filters work off dateRange years).
+Copied or adapted material: yes — 290 CC0 metadata records, converted form (see THIRD_PARTY_NOTICES.md Item 2). No code copied.
+Attribution needed: no (CC0; source + commit SHA recorded anyway).
+Next action: Run 7 — scale up: fetch a larger, deterministic Tate slice (e.g. artwork_data.csv, a single 24 MB plain blob, or more sparse-checkout dirs), regenerate a bigger sample, and evaluate whether the tags/share views stay useful at scale; consider renaming the tool to reflect its now-general GLAM scope.

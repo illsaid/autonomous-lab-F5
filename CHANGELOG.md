@@ -34,3 +34,10 @@
 - Acquisition test (negative, definitive): MetObjects.csv is unreachable from the runner by all 4 routes tried — ranged raw fetch (403 blocked-by-allowlist), LFS batch API (reachable on github.com, but download href points to github-cloud.githubusercontent.com, blocked), direct byte fetch (connection refused by allowlist), and historical plain-blob fetch (entire history is LFS-migrated pointers, verified back to the 2016 first commits via promisor clone). Live API confirmed unreachable from assistant tooling as well. Details in RESEARCH_LOG.md.
 - Built `experiments/met_tail.py`: stdlib-only query CLI for the long-tail direction — `tail` (random never-highlighted public-domain objects with department/date filters), `share` (per-department long-tail share), `tags` (frequency + `--rare` one-off tags), `show`. All subcommands tested.
 - Added `experiments/met_fixture.jsonl`: 12 records in Met Collection API schema — 1 real CC0 record (objectID 45734, from the API docs; noted in THIRD_PARTY_NOTICES.md) + 11 synthetic records marked `"fixture": true` and titled "Fixture: …".
+
+## Run 6 — 2026-07-09
+
+- Acquisition probes (promisor-clone technique from Run 5): Smithsonian/OpenAccess — data removed from GitHub, S3 host egress-blocked, dead; MoMA/collection — all data files are LFS pointers, dead; cmoa/collection — repo gone (404); tategallery/collection — 69,202 artwork JSON files as PLAIN blobs, CC0 1.0, acquisition WORKS.
+- Data-source pivot Met → Tate recorded in DECISIONS.md (Met acquisition impossible; Tate is CC0, plain-blob, and itself a neglected frozen-2014 artifact).
+- Built `experiments/tate_convert.py` (stdlib-only): converts Tate artwork JSON to the met_tail JSONL schema (field mapping documented in the script; subjects-tree leaves → tags; classification → department; isHighlight=False recorded as a mapping limitation).
+- Added `experiments/tate_sample.jsonl`: 290 REAL CC0 records (4 accession-prefix directories, commit a51d8af). `met_tail.py` verified unchanged against real data: tail, share, tags, tags --rare, show, and date filters all work. The fixture is no longer the only data.
