@@ -10,6 +10,8 @@ Answers the three questions from DECISIONS.md (Run 4 sketch):
          and the objects that carry them.
   rare   Neglected-artifact generator: pick one random singleton tag and
          show the single artwork that carries it.
+  era    Long-tail share by acquisition decade, with the acquisition year
+         parsed from creditLine (Tate records carry no explicit field).
   show   Print one record as JSON by objectID.
 
 Data is JSONL, one object per line, using the Met Collection API field
@@ -24,12 +26,14 @@ Usage:
   python3 longtail.py share
   python3 longtail.py tags [--rare]
   python3 longtail.py rare [--seed S]
+  python3 longtail.py era
   python3 longtail.py show OBJECTID
   (all commands accept --data PATH)
 """
 import argparse
 import json
 import random
+import re
 import signal
 import sys
 from collections import Counter, defaultdict
@@ -153,6 +157,42 @@ def cmd_rare(args):
         print(f"      {r['objectURL']}")
 
 
+def acq_year(r):
+    """Acquisition year parsed from creditLine, e.g. 'Presented by ... 1922'.
+
+    Tate metadata has no explicit acquisition-year field in our extract;
+    the credit line conventionally ends with the year. Take the last
+    plausible 4-digit year (1700-2019) anywhere in the string, which also
+    handles lines like 'Purchased 2006. The Artangel Collection at Tate'.
+    """
+    years = re.findall(r"\b(1[7-9]\d\d|20[01]\d)\b", r.get("creditLine") or "")
+    return int(years[-1]) if years else None
+
+
+def cmd_era(args):
+    by_dec = defaultdict(lambda: [0, 0])  # decade -> [total, long_tail]
+    unknown = 0
+    for r in load(args.data):
+        y = acq_year(r)
+        if y is None:
+            unknown += 1
+            continue
+        d = y // 10 * 10
+        by_dec[d][0] += 1
+        if is_long_tail(r):
+            by_dec[d][1] += 1
+    if not by_dec:
+        print("no acquisition years parsed from creditLine")
+        return
+    print(f"{'acquired':<9}  total  long-tail  share")
+    for d in sorted(by_dec):
+        total, lt = by_dec[d]
+        print(f"{str(d) + 's':<9}  {total:>5}  {lt:>9}  {lt/total:>5.0%}")
+    if unknown:
+        print(f"(no year parsed from creditLine for {unknown} records)")
+    print("(acquisition year parsed from creditLine; long tail = isPublicDomain and never isHighlight)")
+
+
 def cmd_show(args):
     for r in load(args.data):
         if r.get("objectID") == args.objectID:
@@ -181,6 +221,7 @@ def main():
     sp = sub.add_parser("rare", help="one random singleton tag and its lone artwork")
     sp.add_argument("--seed", type=int, help="random seed for reproducible output")
     sp.set_defaults(fn=cmd_rare)
+    sub.add_parser("era", help="long-tail share by acquisition decade").set_defaults(fn=cmd_era)
     sp = sub.add_parser("show", help="print one record")
     sp.add_argument("objectID", type=int)
     sp.set_defaults(fn=cmd_show)

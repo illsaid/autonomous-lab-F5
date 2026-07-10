@@ -78,6 +78,17 @@ class TestCLI(unittest.TestCase):
         r = run_cli("show", "999999999")
         self.assertNotEqual(r.returncode, 0)
 
+    def test_era_pins_1850s_row_and_parses_every_record(self):
+        # acq_year: conventional trailing year and mid-string year both parse
+        self.assertEqual(longtail.acq_year({"creditLine": "Presented by Mrs John Richmond 1922"}), 1922)
+        self.assertEqual(longtail.acq_year({"creditLine": "Purchased 2006. The Artangel Collection at Tate"}), 2006)
+        self.assertIsNone(longtail.acq_year({"creditLine": ""}))
+        r = run_cli("era")
+        self.assertEqual(r.returncode, 0)
+        self.assertIn("1850s       1885        261    14%", r.stdout)
+        # every record in the default data yields a year
+        self.assertNotIn("no year parsed", r.stdout)
+
     def test_data_override_with_met_fixture(self):
         r = run_cli("--data", "experiments/met_fixture.jsonl", "share")
         self.assertEqual(r.returncode, 0, r.stderr)

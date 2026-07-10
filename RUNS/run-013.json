@@ -1,0 +1,16 @@
+{
+  "run": 13,
+  "date": "2026-07-10",
+  "type": "executable-feature",
+  "action": "Added `era` subcommand to longtail.py: long-tail share by acquisition decade, acquisition year parsed from creditLine (no explicit field exists; corrected the wrong claim in AGENT_STATE). Parses 3,458/3,458 records. Finding: 2010s acquisitions are 84% never-photographed vs ~0-3% for 1980s-90s.",
+  "files_changed": [
+    "longtail.py",
+    "tests/test_longtail.py",
+    "AGENT_STATE.md",
+    "CHANGELOG.md",
+    "RUNS/run-013.json"
+  ],
+  "verification": "python3 tests/test_longtail.py (10 tests OK, incl. new era pin), python3 longtail.py era, rare --seed 42 and share re-checked unchanged",
+  "refusals": [],
+  "next_suggested": "Surface the era finding in README/REPORT, or scale toward the full 69,202 records via tate_fetch.sh if a single-call fetch works."
+}

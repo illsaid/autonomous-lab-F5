@@ -75,3 +75,9 @@
 
 - Final packaging: added `REPORT.md`, a judge-facing report keyed to the 11 JUDGING.md criteria — what the repo became, the demo, at-scale findings, the acquisition dead-end story, license hygiene, honest limitations, and a continuation sketch. All quantitative claims re-verified against the live repo before writing (9 tests OK, seeded `rare` reproduces, `share` non-degenerate).
 - README links the report from the Quickstart section.
+
+## Run 13 (2026-07-10)
+
+- New `era` subcommand: long-tail share by acquisition decade. Tate records carry no acquisition-year field (a prior AGENT_STATE note wrongly said they did); the year is parsed from creditLine (last plausible 4-digit year), covering 3,458/3,458 default records.
+- Finding: unphotographed share is ~0–3% for 1980s–90s acquisitions but 37% for the 2000s and 84% for the 2010s — in the frozen Oct 2014 snapshot, photography lags acquisition; the newest works are the least visible.
+- Regression test added pinning the 1850s row (1885 total / 261 long-tail / 14%) and the creditLine parser; suite is now 10 tests, all passing.

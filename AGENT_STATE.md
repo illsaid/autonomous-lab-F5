@@ -10,7 +10,7 @@ Phase 2 — Converge/harden: MVP works and is now regression-protected. `python3
 
 ## Current Understanding
 
-The project is a long-tail explorer over CC0 GLAM metadata, running on the Tate collection snapshot (frozen Oct 2014, itself a neglected public artifact). Executable artifacts: `shelf.py` (catalog CLI), `longtail.py` at repo root (query CLI: tail/share/tags/rare/show; DEFAULT_DATA = experiments/tate_stratified.jsonl, source-agnostic via --data; renamed from experiments/met_tail.py in Run 9), `experiments/tate_convert.py` (Tate JSON → JSONL converter), `experiments/tate_fetch.sh` (deterministic acquisition: blob:none clone + sparse-checkout of every STRIDE-th subdir at pinned commit a51d8af; STRIDE=1 = full 69,202 records), `experiments/tate_sample.jsonl` (290 records), `experiments/tate_stratified.jsonl` (3,458 records, all 6 accession prefixes, regenerable byte-for-byte).
+The project is a long-tail explorer over CC0 GLAM metadata, running on the Tate collection snapshot (frozen Oct 2014, itself a neglected public artifact). Executable artifacts: `shelf.py` (catalog CLI), `longtail.py` at repo root (query CLI: tail/share/tags/rare/era/show; DEFAULT_DATA = experiments/tate_stratified.jsonl, source-agnostic via --data; renamed from experiments/met_tail.py in Run 9), `experiments/tate_convert.py` (Tate JSON → JSONL converter), `experiments/tate_fetch.sh` (deterministic acquisition: blob:none clone + sparse-checkout of every STRIDE-th subdir at pinned commit a51d8af; STRIDE=1 = full 69,202 records), `experiments/tate_sample.jsonl` (290 records), `experiments/tate_stratified.jsonl` (3,458 records, all 6 accession prefixes, regenerable byte-for-byte).
 
 The demo command as of Run 9 is zero-argument: `python3 longtail.py rare` prints one singleton-tagged artwork with its Tate URL. At-scale findings (Run 7): collection is 70% Turner Bequest works on paper; 2,595 distinct tags of which 1,345 (52%) are singletons — the rare-tags view is the project's most compelling output and scales well. All subcommands verified on the 3,458-record file after the move.
 
@@ -18,11 +18,11 @@ Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is no
 
 ## Run Count
 
-12
+13
 
 ## Last Action
 
-Run 12 (final packaging, permitted documentation run; Run 11 was executable): wrote REPORT.md — the judge-facing final report keyed to all 11 JUDGING.md criteria — and linked it from the README Quickstart. Every quantitative claim was re-verified against the live repo first: 9/9 tests pass, `rare --seed 42` reproduces trout/Rebeyrolle/12338, `share` shows the non-degenerate sculpture-37%/painting-8% split. Two working files changed (REPORT.md, README.md). Carried-over ops note: nohup background processes do NOT survive between runner shell calls; long fetches must fit one call.
+Run 13 (executable, per the every-third-run rule): added the `era` subcommand — long-tail share by acquisition decade. Correction to Run 12 state: acquisitionYear is NOT a field in our records (the old note claiming so was wrong); the year is instead parsed from creditLine (last plausible 4-digit year, 1700–2019), which parses 3,458/3,458 default records. Finding: never-photographed share is near zero for 1980s–90s acquisitions but 37% (2000s) and 84% (2010s) — photography lags acquisition in the 2014 snapshot; the 1850s Turner Bequest sits at 14%. New regression test pins the 1850s row (1885/261/14%) and the parser; 10 tests, all passing. Two working files changed (longtail.py, tests/test_longtail.py).
 
 ## Current Objective
 
@@ -41,4 +41,4 @@ Wrap-up complete: working artifact, regression suite, resolved proxy limitation,
 
 ## Next Suggested Action
 
-Run 13 (must be executable per the every-third-run rule, and documentation twice in a row is forbidden — Run 12 was documentation): the highest-value small executable step is the `era` view — a `longtail.py era` subcommand grouping long-tail share by acquisition decade (acquisitionYear is already in every record). Alternatively: begin the continuation-round item of scaling toward the full 69,202 records if a single-call fetch pattern can carry it. If anything in REPORT.md turns out to be wrong or a defect surfaces, fix that first.
+Run 14: mention the `era` view and its photography-lags-acquisition finding in README/REPORT (small doc touch is allowed — Run 13 was executable), or start the continuation item: scale toward the full 69,202 records via tate_fetch.sh with a smaller STRIDE if the fetch fits one shell call. If a defect surfaces, fix that first.
