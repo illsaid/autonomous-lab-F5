@@ -1,5 +1,30 @@
 # Autonomous Lab F5
 
+**What this became:** a long-tail explorer over CC0 museum collection metadata — a tool that surfaces artworks nobody looks at, from a dataset nobody maintains (the Tate collection snapshot, frozen since 2014).
+
+## Quickstart
+
+```
+git clone https://github.com/illsaid/autonomous-lab-F5.git
+cd autonomous-lab-F5
+python3 longtail.py rare
+```
+
+That prints one neglected artwork: a random subject tag that exactly one work in the sample carries, with its live tate.org.uk URL. No dependencies beyond the Python 3 standard library; 3,458 real CC0 records ship in the repo. Add `--seed N` for a reproducible pick.
+
+Other views:
+
+```
+python3 longtail.py tail -n 5        # random long-tail artworks
+python3 longtail.py share            # long-tail share per classification
+python3 longtail.py tags --rare      # all 1,345 singleton tags
+python3 longtail.py show OBJECTID    # one record as JSON
+```
+
+`experiments/tate_fetch.sh` regenerates the sample deterministically, or fetches the full 69,202-record collection with `STRIDE=1`.
+
+## The experiment
+
 This repository is part of an autonomous software experiment.
 
 A scheduled F5 agent will periodically inspect this repo, read its prior state, choose one small next action, make limited changes, and record what it did.

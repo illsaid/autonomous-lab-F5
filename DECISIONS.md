@@ -60,3 +60,9 @@ Evidence for Tate: 69,202 artwork JSON files as plain git blobs on github.com (t
 Known limitation recorded: Tate has no highlight flag, so the "never-highlighted" framing degrades to full-collection browsing for this source; the share view reads as classification coverage. If a highlight-like signal is wanted later, options include Tate's thumbnailUrl presence or ARTIST ROOMS membership.
 
 Next build step: scale the sample up (artwork_data.csv is a single 24 MB plain blob, or more sparse-checkout directories), then re-evaluate the three sketch questions at scale.
+
+## Run 9 — Promotion: experiments/met_tail.py → longtail.py (repo root)
+
+Decision: the query CLI is the project's primary artifact, so it moves out of experiments/ to the repo root under a source-neutral name, with DEFAULT_DATA switched from the 12-record fixture to experiments/tate_stratified.jsonl (3,458 real CC0 records). `python3 longtail.py rare` now works with zero arguments after a plain clone — the mission demonstrated in one command.
+
+Rationale: convergence was justified in Runs 4–7 (evidence in RESEARCH_LOG.md); Run 8 built the demo subcommand; this run makes the repo read as one coherent runnable thing rather than an experiments folder. The name "met_tail" was wrong twice over (source pivoted to Tate in Run 6; scope is CC0 GLAM generally). No stub left at the old path — git history records the rename, and nothing in the repo invoked the old path programmatically. Comments in tate_convert.py/tate_fetch.sh still say "met_tail JSONL schema" as a schema name; left unchanged deliberately (anti-fiddling rule).

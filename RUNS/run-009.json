@@ -1,0 +1,13 @@
+{
+  "run": 9,
+  "date": "2026-07-09",
+  "phase": "converge",
+  "action": "promote-cli-to-root-as-longtail",
+  "summary": "git mv experiments/met_tail.py -> longtail.py; DEFAULT_DATA switched from the 12-record fixture to experiments/tate_stratified.jsonl so `python3 longtail.py rare` runs with zero arguments after clone. README rewritten around that quickstart. Rename and no-stub decision recorded in DECISIONS.md. All subcommands re-tested post-move (rare --seed 42 reproduces 'trout'/Rebeyrolle; tail/share/tags/show pass; --data override verified against met_fixture.jsonl).",
+  "files_changed": ["longtail.py (renamed from experiments/met_tail.py)", "README.md", "DECISIONS.md", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-009.json"],
+  "executable_artifact": true,
+  "documentation_only": false,
+  "third_party_material_copied": false,
+  "refusals": "none",
+  "next": "Run 10: first post-MVP hardening run — add a small self-test (e.g. `python3 longtail.py selftest` or a tests/ script asserting record count, tag counts, and the seeded rare pick) so regressions are catchable; alternatively fix the known limitation notes (isHighlight always False for Tate) if a cheap highlight proxy emerges."
+}

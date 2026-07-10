@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""met_tail.py — query the neglected long tail of Met CC0 collection metadata.
+"""longtail.py — query the neglected long tail of CC0 GLAM collection metadata.
 
 Answers the three questions from DECISIONS.md (Run 4 sketch):
 
@@ -14,17 +14,17 @@ Answers the three questions from DECISIONS.md (Run 4 sketch):
 
 Data is JSONL, one object per line, using the Met Collection API field
 names (objectID, isHighlight, isPublicDomain, department, tags, ...).
-Default data file is met_fixture.jsonl next to this script — a small
-schema-faithful fixture (see --data to point at a real extract).
-Records with "fixture": true are synthetic and clearly marked; the rest
-are real CC0 records.
+Default data file is experiments/tate_stratified.jsonl — 3,458 real CC0
+records from the Tate collection snapshot (see experiments/tate_fetch.sh
+to regenerate or scale it). Use --data to point at any other extract,
+e.g. experiments/met_fixture.jsonl.
 
 Usage:
-  python3 met_tail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S]
-  python3 met_tail.py share
-  python3 met_tail.py tags [--rare]
-  python3 met_tail.py rare [--seed S]
-  python3 met_tail.py show OBJECTID
+  python3 longtail.py tail [-n N] [--department D] [--begin YEAR] [--end YEAR] [--seed S]
+  python3 longtail.py share
+  python3 longtail.py tags [--rare]
+  python3 longtail.py rare [--seed S]
+  python3 longtail.py show OBJECTID
   (all commands accept --data PATH)
 """
 import argparse
@@ -34,7 +34,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-DEFAULT_DATA = Path(__file__).parent / "met_fixture.jsonl"
+DEFAULT_DATA = Path(__file__).parent / "experiments" / "tate_stratified.jsonl"
 
 
 def load(path):

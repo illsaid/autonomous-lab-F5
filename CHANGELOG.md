@@ -53,3 +53,9 @@
 - Added `rare` subcommand to `experiments/met_tail.py`: the neglected-artifact generator. Picks one random singleton tag (deterministic with `--seed`) and prints the lone artwork carrying it, including its tate.org.uk URL — the project mission demonstrated in one command.
 - Tested: reproducible with `--seed 42` (tag "trout" → Rebeyrolle, *Trout*, 1956), random without seed, correct counts at scale (2,595 tags / 1,345 singletons on the 3,458-record stratified sample), graceful on tag-free data, works on the fixture; `tail`, `share`, `tags --rare` re-verified unchanged.
 - No new data sources (per Run-7 convergence plan). One working file changed.
+
+## Run 9 — 2026-07-09
+
+- Promoted the CLI: `experiments/met_tail.py` → `longtail.py` at repo root (git mv, source-neutral name). DEFAULT_DATA now points at `experiments/tate_stratified.jsonl`, so `python3 longtail.py rare` works with zero arguments immediately after clone.
+- Rewrote the README opening around a Quickstart: clone → `python3 longtail.py rare` → one neglected artwork with a live Tate URL; listed the other views and the fetch/scale script.
+- Rename + rationale recorded in DECISIONS.md. All subcommands re-tested post-move: rare (seeded and random), tail, share, tags, show, and --data override with the Met fixture.
