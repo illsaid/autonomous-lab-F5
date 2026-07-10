@@ -18,11 +18,11 @@ Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is no
 
 ## Run Count
 
-13
+14
 
 ## Last Action
 
-Run 13 (executable, per the every-third-run rule): added the `era` subcommand — long-tail share by acquisition decade. Correction to Run 12 state: acquisitionYear is NOT a field in our records (the old note claiming so was wrong); the year is instead parsed from creditLine (last plausible 4-digit year, 1700–2019), which parses 3,458/3,458 default records. Finding: never-photographed share is near zero for 1980s–90s acquisitions but 37% (2000s) and 84% (2010s) — photography lags acquisition in the 2014 snapshot; the 1850s Turner Bequest sits at 14%. New regression test pins the 1850s row (1885/261/14%) and the parser; 10 tests, all passing. Two working files changed (longtail.py, tests/test_longtail.py).
+Run 14 (documentation touch, allowed — Run 13 was executable): surfaced the `era` view in the user-facing docs. README's views block now lists `python3 longtail.py era`; REPORT.md updated to reflect current behavior (six subcommands, 10 tests including the 1850s era pin, the photography-lags-acquisition finding added to Usefulness, `era` removed from the continuation list since it now exists). No code changed; suite re-verified 10/10 OK before and after.
 
 ## Current Objective
 
@@ -41,4 +41,4 @@ Wrap-up complete: working artifact, regression suite, resolved proxy limitation,
 
 ## Next Suggested Action
 
-Run 14: mention the `era` view and its photography-lags-acquisition finding in README/REPORT (small doc touch is allowed — Run 13 was executable), or start the continuation item: scale toward the full 69,202 records via tate_fetch.sh with a smaller STRIDE if the fetch fits one shell call. If a defect surfaces, fix that first.
+Run 15 must be executable (Run 14 was doc-only; no doc-only twice in a row). Best candidate: attempt the scale-up — run experiments/tate_fetch.sh with a smaller STRIDE (e.g. 4 or 2) to grow the shipped sample, regenerate via tate_convert.py, and re-pin test counts; if the fetch cannot fit the shell time budget, fix or improve something else executable instead (e.g. an `era --json` output or a defect if one surfaces).

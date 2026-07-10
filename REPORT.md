@@ -1,6 +1,6 @@
 # Final Report — Autonomous Lab F5
 
-*Written by the F5 agent at Run 12, keyed to the criteria in [JUDGING.md](JUDGING.md). Every claim below is reproducible from a plain clone with Python 3 and no dependencies.*
+*Written by the F5 agent at Run 12, updated at Run 14, keyed to the criteria in [JUDGING.md](JUDGING.md). Every claim below is reproducible from a plain clone with Python 3 and no dependencies.*
 
 ## What the repo became
 
@@ -16,11 +16,12 @@ prints one artwork that is the *only* work in the sample carrying its subject ta
 
 ## Usefulness
 
-The tool answers real questions a curator, researcher, or bored human can't easily ask the Tate's own site: which works were *never photographed* (`tail`), which classifications are most neglected (`share`), which subjects exist exactly once in the collection (`tags --rare`, `rare`). Findings at scale (3,458-record stratified sample, Run 7 & 11):
+The tool answers real questions a curator, researcher, or bored human can't easily ask the Tate's own site: which works were *never photographed* (`tail`), which classifications are most neglected (`share`), which subjects exist exactly once in the collection (`tags --rare`, `rare`), and how neglect tracks acquisition date (`era`). Findings at scale (3,458-record stratified sample, Run 7 & 11):
 
 - 1,345 of 2,595 subject tags (52%) are singletons — the tail is most of the vocabulary.
 - 16% of sampled works have never been photographed; sculpture is 37% unphotographed vs painting at 8%.
 - The deepest tail: blank pages of Turner's sketchbooks, individually accessioned, untagged, unphotographed.
+- Photography lags acquisition (Run 13, `era`): works acquired in the 1980s–90s are ≤3% unphotographed, but the 2000s sit at 37% and the 2010s at 84% — in the frozen 2014 snapshot, the newest works are the least visible.
 
 ## Originality
 
@@ -28,12 +29,12 @@ Not a GitHub-code-archaeology project (the obvious attractor the rules warn abou
 
 ## Coherence
 
-One tool (`longtail.py`, five subcommands), one dataset (`experiments/tate_stratified.jsonl`), one converter (`tate_convert.py`), one deterministic fetcher (`tate_fetch.sh`), one test suite. `shelf.py` + `catalog.jsonl` remain as the Run 1–3 exploration instrument that led here — a working catalog of 7 candidate artifacts across 5 kinds, with liveness probes.
+One tool (`longtail.py`, six subcommands), one dataset (`experiments/tate_stratified.jsonl`), one converter (`tate_convert.py`), one deterministic fetcher (`tate_fetch.sh`), one test suite. `shelf.py` + `catalog.jsonl` remain as the Run 1–3 exploration instrument that led here — a working catalog of 7 candidate artifacts across 5 kinds, with liveness probes.
 
 ## Executability
 
 - `python3 longtail.py rare` — zero-argument demo after plain clone.
-- `python3 tests/test_longtail.py` — 9 regression tests, all passing (record counts, tag counts, seeded reproducibility, JSON output, exit codes, SIGPIPE behavior, the 2,902/556 photographed split).
+- `python3 tests/test_longtail.py` — 10 regression tests, all passing (record counts, tag counts, seeded reproducibility, JSON output, exit codes, SIGPIPE behavior, the 2,902/556 photographed split, the 1850s `era` row and creditLine year parser).
 - `experiments/tate_fetch.sh` regenerates the shipped sample byte-for-byte from the pinned upstream commit (a51d8af); `STRIDE=1` fetches all 69,202 records.
 
 ## Breadth before convergence
@@ -54,7 +55,7 @@ Everything shipped is CC0 (Tate) or original. The one borrowed record (a Met API
 
 ## What would come next
 
-A continuation round would: scale to the full 69,202 records (the fetcher already supports it), add an `era` view (neglect by acquisition decade), and probe whether works surfaced by `rare` correlate with missing Wikipedia/Wikidata coverage — turning the toy into a to-do list for open-culture volunteers.
+A continuation round would: scale to the full 69,202 records (the fetcher already supports it) and probe whether works surfaced by `rare` correlate with missing Wikipedia/Wikidata coverage — turning the toy into a to-do list for open-culture volunteers.
 
 ## Honest limitations
 

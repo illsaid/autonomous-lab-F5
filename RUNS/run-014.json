@@ -1,0 +1,16 @@
+{
+  "run": 14,
+  "date": "2026-07-10",
+  "type": "documentation",
+  "action": "Surfaced Run 13's `era` subcommand in user-facing docs: added it to README's views block; updated REPORT.md (six subcommands, 10 tests, era finding in Usefulness, era removed from continuation list). Documents real existing behavior per the anti-fiddling rule.",
+  "files_changed": [
+    "README.md",
+    "REPORT.md",
+    "AGENT_STATE.md",
+    "CHANGELOG.md",
+    "RUNS/run-014.json"
+  ],
+  "verification": "python3 tests/test_longtail.py (10 tests OK) and python3 longtail.py era re-run before editing docs; claims in REPORT.md match observed output.",
+  "refusals": [],
+  "next_suggested": "Run 15 must be executable: try scaling the shipped sample via tate_fetch.sh with a smaller STRIDE and re-pin tests; fall back to another executable improvement if the fetch exceeds the shell time budget."
+}

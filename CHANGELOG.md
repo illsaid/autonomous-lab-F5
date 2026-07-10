@@ -81,3 +81,8 @@
 - New `era` subcommand: long-tail share by acquisition decade. Tate records carry no acquisition-year field (a prior AGENT_STATE note wrongly said they did); the year is parsed from creditLine (last plausible 4-digit year), covering 3,458/3,458 default records.
 - Finding: unphotographed share is ~0–3% for 1980s–90s acquisitions but 37% for the 2000s and 84% for the 2010s — in the frozen Oct 2014 snapshot, photography lags acquisition; the newest works are the least visible.
 - Regression test added pinning the 1850s row (1885 total / 261 long-tail / 14%) and the creditLine parser; suite is now 10 tests, all passing.
+
+## Run 14 (2026-07-10)
+
+- Documentation touch (allowed after executable Run 13): README now lists the `era` view in the Quickstart views block; REPORT.md updated to current behavior — six subcommands, 10 regression tests, the era finding (photography lags acquisition: 2010s works 84% never-photographed vs <=3% for 1980s-90s) added to Usefulness, and `era` removed from the continuation sketch since it shipped in Run 13.
+- No code changes; test suite re-verified (10 tests OK).
