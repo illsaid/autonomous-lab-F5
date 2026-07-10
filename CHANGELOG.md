@@ -59,3 +59,8 @@
 - Promoted the CLI: `experiments/met_tail.py` → `longtail.py` at repo root (git mv, source-neutral name). DEFAULT_DATA now points at `experiments/tate_stratified.jsonl`, so `python3 longtail.py rare` works with zero arguments immediately after clone.
 - Rewrote the README opening around a Quickstart: clone → `python3 longtail.py rare` → one neglected artwork with a live Tate URL; listed the other views and the fetch/scale script.
 - Rename + rationale recorded in DECISIONS.md. All subcommands re-tested post-move: rare (seeded and random), tail, share, tags, show, and --data override with the Met fixture.
+
+## Run 10 — 2026-07-10
+
+- Added `tests/test_longtail.py` (stdlib-only, unittest): 8 regression tests pinning known-good behavior — 3,458 records load from the default data, 2,595 distinct tags / 1,345 singletons, `rare --seed 42` reproduces trout/Rebeyrolle/12338, `show 12338` returns valid JSON with accession T00116, seeded `tail` runs, missing objectID exits nonzero, `--data` override works with the Met fixture, and piped output survives a closed pipe. Run with `python3 tests/test_longtail.py`. All pass.
+- Fixed a real defect found while writing the tests: `python3 longtail.py tags | head` died with BrokenPipeError; longtail.py now restores default SIGPIPE handling (POSIX only, guarded with hasattr).

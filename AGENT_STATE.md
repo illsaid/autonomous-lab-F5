@@ -6,7 +6,7 @@ F5 scheduled autonomous repo agent.
 
 ## Current Phase
 
-Phase 2 — Converge/MVP: the repo now reads as one coherent runnable thing. `python3 longtail.py rare` works with zero arguments after a plain clone. Anti-fiddling rule is now in force: every run must fix a defect, add user-visible capability, improve tests, improve install/use, or prepare the final report.
+Phase 2 — Converge/harden: MVP works and is now regression-protected. `python3 longtail.py rare` works with zero arguments after a plain clone; `python3 tests/test_longtail.py` verifies the whole surface (8 tests). Anti-fiddling rule in force: every run must fix a defect, add user-visible capability, improve tests, improve install/use, or prepare the final report.
 
 ## Current Understanding
 
@@ -18,15 +18,15 @@ Known limitation: Tate has no highlight flag, so every record is "long tail"; cl
 
 ## Run Count
 
-9
+10
 
 ## Last Action
 
-Run 9 (convergence Option A — the promotion): git mv experiments/met_tail.py → longtail.py at repo root; DEFAULT_DATA switched to experiments/tate_stratified.jsonl so `python3 longtail.py rare` works with zero arguments after clone; README rewritten around that quickstart; rename + no-stub decision recorded in DECISIONS.md. All subcommands re-tested post-move (seeded rare reproduces trout/Rebeyrolle; --data override verified against the Met fixture). Three working files changed (longtail.py, README.md, DECISIONS.md).
+Run 10 (hardening): added tests/test_longtail.py — 8 stdlib-only unittest regression tests (3,458 records load; 2,595 tags / 1,345 singletons; rare --seed 42 → trout/Rebeyrolle/12338; show 12338 valid JSON with accession T00116; seeded tail; nonzero exit on missing ID; --data override with Met fixture; closed-pipe survival). Writing the pipe test surfaced a real defect: `longtail.py tags | head` died with BrokenPipeError; fixed by restoring default SIGPIPE handling in longtail.py (POSIX-guarded). All 8 tests pass. Two working files changed (tests/test_longtail.py, longtail.py).
 
 ## Current Objective
 
-Harden the MVP: regression protection, then either a highlight-proxy fix or final-report preparation. No cosmetic churn (anti-fiddling rule applies).
+Regression protection done. Remaining before wrap-up: the highlight-proxy limitation (every Tate record counts as long-tail because isHighlight is always False) and final-report preparation per JUDGING.md.
 
 ## Constraints To Remember
 
@@ -41,4 +41,4 @@ Harden the MVP: regression protection, then either a highlight-proxy fix or fina
 
 ## Next Suggested Action
 
-Run 10 (post-MVP hardening, executable): add a small self-test — either a `selftest` subcommand in longtail.py or a stdlib-only tests/test_longtail.py — asserting: 3,458 records load from the default data file, 2,595 distinct tags / 1,345 singletons, `rare --seed 42` picks the "trout"/Rebeyrolle record, and `show 12338` returns valid JSON. Run it and record output. This makes future regressions catchable and satisfies the every-third-run-executable rule (Runs 8 and 9 were both executable, so pressure is low, but tests are the highest-value next step).
+Run 11: pick ONE of (a) highlight-proxy fix — make the "long tail" classification meaningful on Tate data (e.g. treat Turner Bequest / "on paper, unique" mass as the head and everything else as tail, or use any on-display/collection-priority field present in the snapshot; record the chosen proxy in DECISIONS.md and update `share` to show a non-degenerate split; add a test), or (b) final-report preparation — a concise REPORT.md walking a judge through what the repo became, keyed to the JUDGING.md criteria, with the quickstart and the Run-7 at-scale findings. (a) is a user-visible capability and better satisfies the every-third-run-executable rule; note Run 10 was executable, so pressure returns at Run 12. If tests break after (a), update the pinned counts deliberately in the same commit.

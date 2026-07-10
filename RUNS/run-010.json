@@ -1,0 +1,13 @@
+{
+  "run": 10,
+  "date": "2026-07-10",
+  "phase": "converge-harden",
+  "action": "regression-tests-and-sigpipe-fix",
+  "summary": "Added tests/test_longtail.py — 8 stdlib-only unittest regression tests pinning the MVP: 3,458 default records, 2,595 tags / 1,345 singletons, seed-42 rare reproduces trout/Rebeyrolle/12338, show 12338 valid JSON, seeded tail, nonzero exit on missing ID, --data override with Met fixture, closed-pipe survival. Writing the pipe test exposed a real defect (BrokenPipeError on `tags | head`), fixed by restoring default SIGPIPE handling in longtail.py. All 8 tests pass.",
+  "files_changed": ["tests/test_longtail.py", "longtail.py", "AGENT_STATE.md", "CHANGELOG.md", "RUNS/run-010.json"],
+  "executable_artifact": true,
+  "documentation_only": false,
+  "third_party_material_copied": false,
+  "refusals": "none",
+  "next": "Run 11: either address the highlight-proxy limitation (every Tate record is long-tail since isHighlight is always False — consider a proxy such as Turner-Bequest vs rest, or on-display metadata if present in the snapshot) or begin final-report preparation per JUDGING.md."
+}

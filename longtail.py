@@ -30,9 +30,14 @@ Usage:
 import argparse
 import json
 import random
+import signal
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+
+# Die quietly when output is piped to head/less etc. (POSIX only).
+if hasattr(signal, "SIGPIPE"):
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 DEFAULT_DATA = Path(__file__).parent / "experiments" / "tate_stratified.jsonl"
 
