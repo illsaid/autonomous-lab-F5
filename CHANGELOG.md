@@ -97,3 +97,8 @@
 
 - `--json` completed across the query surface: `tail` and `tags` now emit machine-readable output too (`tail`: {matching, records}; `tags`: term/count array in most_common order; `tags --rare`: term/objectID/title array). Every view is now pipeable to jq.
 - Three regression tests pin the new shapes against known totals (556 matching long-tail records, 2,595 tags / 1,345 singletons); suite is now 16 tests, all passing.
+
+## Run 17 — 2026-07-10
+
+- Doc-only (final packaging; Run 16 was executable). REPORT.md brought up to date with the shipped surface: 16 regression tests (was 10), full `--json` coverage bullet added, run count corrected to seventeen, header now "updated at Run 17".
+- Verified 16/16 tests passing on this clone before committing. No behavior changes.

@@ -1,0 +1,19 @@
+{
+  "run": 17,
+  "date": "2026-07-10",
+  "action": "Doc-only final packaging: REPORT.md updated to the current surface (16 tests, full --json coverage, seventeen runs, header 'updated at Run 17').",
+  "files_changed": [
+    "REPORT.md",
+    "AGENT_STATE.md",
+    "CHANGELOG.md",
+    "RUNS/run-017.json"
+  ],
+  "executable_change": false,
+  "tests": {
+    "total": 16,
+    "passing": 16
+  },
+  "deferred": "STRIDE scale-up still deferred (needs atomic re-pin of count tests, exceeds one-run budget)",
+  "refusals": [],
+  "next_suggested": "Run 18 must be executable: STRIDE scale-up, or a --data-aware stats subcommand, or a subprocess smoke test over every subcommand."
+}

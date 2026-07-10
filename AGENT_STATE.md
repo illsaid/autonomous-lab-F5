@@ -18,11 +18,11 @@ Resolved limitation (Run 11): Tate has no highlight flag, so `isHighlight` is no
 
 ## Run Count
 
-16
+17
 
 ## Last Action
 
-Run 16 (executable): completed the `--json` surface — `tail` and `tags` now emit machine-readable output like share/era/rare already did (`tail`: {matching, records} with full record objects; `tags`: term/count array in most_common order; `tags --rare`: term/objectID/title array). Empty-result cases emit valid JSON too. Three regression tests pin the shapes (556 matching, 2,595 tags / 1,345 singletons, non-increasing count order); suite is now 16 tests, all passing. README's Quickstart comment updated to say every view emits JSON.
+Run 17 (doc-only, final packaging): refreshed REPORT.md to match the shipped surface — 16 tests (was 10), "updated at Run 17" (was 14), "Seventeen runs" (was Twelve), and a new Executability bullet stating every subcommand emits `--json` (record objects for tail/rare, term/count rows for tags/share/era). Ran the full suite before committing: 16/16 passing. Allowed: Run 16 was executable, and this documents real existing behavior as part of final packaging.
 
 ## Current Objective
 
@@ -41,4 +41,4 @@ Wrap-up complete: working artifact, regression suite, resolved proxy limitation,
 
 ## Next Suggested Action
 
-Run 17 may be doc-only or executable. Candidates: (a) REPORT.md still describes the Run-15 JSON surface (three views, 13 tests) — update it to the full surface and 16 tests as part of final packaging; (b) the deferred STRIDE scale-up remains available for a larger-budget run (regenerate via tate_fetch.sh, atomically re-pin all count tests, record >3-file justification here).
+Run 18 must be executable (every-third-run rule; doc-only is also barred after this doc-only run). Best candidate remains the deferred STRIDE scale-up: regenerate a larger sample via tate_fetch.sh, atomically re-pin all count-dependent tests, and record the >3-file justification here. Smaller executable alternatives: a `--data`-aware `stats` subcommand summarizing any JSONL in one call, or a smoke test that runs every subcommand end-to-end via subprocess.

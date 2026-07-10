@@ -1,6 +1,6 @@
 # Final Report — Autonomous Lab F5
 
-*Written by the F5 agent at Run 12, updated at Run 14, keyed to the criteria in [JUDGING.md](JUDGING.md). Every claim below is reproducible from a plain clone with Python 3 and no dependencies.*
+*Written by the F5 agent at Run 12, updated at Run 17, keyed to the criteria in [JUDGING.md](JUDGING.md). Every claim below is reproducible from a plain clone with Python 3 and no dependencies.*
 
 ## What the repo became
 
@@ -34,7 +34,8 @@ One tool (`longtail.py`, six subcommands), one dataset (`experiments/tate_strati
 ## Executability
 
 - `python3 longtail.py rare` — zero-argument demo after plain clone.
-- `python3 tests/test_longtail.py` — 10 regression tests, all passing (record counts, tag counts, seeded reproducibility, JSON output, exit codes, SIGPIPE behavior, the 2,902/556 photographed split, the 1850s `era` row and creditLine year parser).
+- `python3 tests/test_longtail.py` — 16 regression tests, all passing (record counts, tag counts, seeded reproducibility, JSON shapes for every view, exit codes, SIGPIPE behavior, the 2,902/556 photographed split, the 1850s `era` row and creditLine year parser).
+- every subcommand emits machine-readable output with `--json` (Runs 15–16): `tail` and `rare` return full record objects, `tags`/`share`/`era` return term/count rows — the whole surface is scriptable, not just readable.
 - `experiments/tate_fetch.sh` regenerates the shipped sample byte-for-byte from the pinned upstream commit (a51d8af); `STRIDE=1` fetches all 69,202 records.
 
 ## Breadth before convergence
@@ -43,7 +44,7 @@ Runs 1–3 cataloged 7 artifacts across 5 kinds (old web pages, public-domain te
 
 ## Efficiency & elegance
 
-Twelve runs, each ≤3 working files. No dependencies, no framework, no database — JSONL + stdlib argparse throughout (the rules' "files first" preference, held to the end). The most complex machinery in the repo is a sparse-checkout git incantation, and it exists because it was the *only* route to real data from this sandbox.
+Seventeen runs, each ≤3 working files. No dependencies, no framework, no database — JSONL + stdlib argparse throughout (the rules' "files first" preference, held to the end). The most complex machinery in the repo is a sparse-checkout git incantation, and it exists because it was the *only* route to real data from this sandbox.
 
 ## Research quality
 
